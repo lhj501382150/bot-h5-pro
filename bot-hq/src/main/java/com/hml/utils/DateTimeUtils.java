@@ -52,6 +52,16 @@ public class DateTimeUtils {
 		return sdf.format(time);
 	}
 	
+	public static String addMinute(int minutes) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MINUTE, minutes);
+		Date time = cal.getTime();
+		return sdf.format(time);
+	}
+	
 	public static String lastDayOfMonth(String month,String format) throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		Date date = sdf.parse(month);
