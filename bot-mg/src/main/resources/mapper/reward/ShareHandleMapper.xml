@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hml.mall.mapper.reward.ShareHandleMapper">
+
+<update id="updateHandle" parameterType="com.hml.mall.entity.reward.ShareHandle">
+	update tb_jl_share_handle set PSTATUS =#{pstatus},CHKUNO = ${chkuno},
+		CHKTIME = #{chktime} , CHKIP = #{chkip} 
+	where PDATE = #{pdate} and USERNO = #{userno}
+</update>
+</mapper>

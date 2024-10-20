@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hml.mall.mapper.user.UserMapper">
+	<select id="findOrgNumByUser" parameterType="java.util.Map" resultType="java.util.Map">
+		select t.* from (
+		select clevel,count(1) as num, concat(clevel , ' 级代理') as name  from tb_hy_user_relation 
+		where userno in (select userno  from tb_hy_user where orgtype =1)
+			<if test="clevel != null and clevel != ''">
+					and clevel &gt; #{clevel}
+				</if>
+			<if test="uno1 != null and uno1 != ''">
+					and uno1 = #{uno1}
+				</if>
+				<if test="uno2 != null and uno2 != ''">
+					and uno2 = #{uno2}
+				</if>
+				<if test="uno3 != null and uno3 != ''">
+					and uno3 = #{uno3}
+				</if>
+				<if test="uno4 != null and uno4 != ''">
+					and uno4 = #{uno4}
+				</if>
+				<if test="uno5 != null and uno5 != ''">
+					and uno5 = #{uno5}
+				</if>
+				<if test="uno6 != null and uno6 != ''">
+					and uno6 = #{uno6}
+				</if>
+				<if test="uno7 != null and uno7 != ''">
+					and uno7 = #{uno7}
+				</if>
+				<if test="uno8 != null and uno8 != ''">
+					and uno8 = #{uno8}
+				</if>
+				<if test="uno9 != null and uno9 != ''">
+					and uno9 = #{uno9}
+				</if>
+				<if test="uno10 != null and uno10 != ''">
+					and uno10 = #{uno10}
+				</if>
+				<if test="uno11 != null and uno11 != ''">
+					and uno11 = #{uno11}
+				</if>
+				<if test="uno12 != null and uno12 != ''">
+					and uno12 = #{uno12}
+				</if>
+				<if test="uno13 != null and uno13 != ''">
+					and uno13 = #{uno13}
+				</if>
+				<if test="uno14 != null and uno14 != ''">
+					and uno14 = #{uno14}
+				</if>
+		group by CLEVEL order by clevel
+		) t
+		union all 
+		select '-1' as clevel,count(1) as num,'全部会员' as name from  tb_hy_user_relation 
+		where userno in (select userno  from tb_hy_user where orgtype =2)
+			<if test="uno1 != null and uno1 != ''">
+					and uno1 = #{uno1}
+				</if>
+				<if test="uno2 != null and uno2 != ''">
+					and uno2 = #{uno2}
+				</if>
+				<if test="uno3 != null and uno3 != ''">
+					and uno3 = #{uno3}
+				</if>
+				<if test="uno4 != null and uno4 != ''">
+					and uno4 = #{uno4}
+				</if>
+				<if test="uno5 != null and uno5 != ''">
+					and uno5 = #{uno5}
+				</if>
+				<if test="uno6 != null and uno6 != ''">
+					and uno6 = #{uno6}
+				</if>
+				<if test="uno7 != null and uno7 != ''">
+					and uno7 = #{uno7}
+				</if>
+				<if test="uno8 != null and uno8 != ''">
+					and uno8 = #{uno8}
+				</if>
+				<if test="uno9 != null and uno9 != ''">
+					and uno9 = #{uno9}
+				</if>
+				<if test="uno10 != null and uno10 != ''">
+					and uno10 = #{uno10}
+				</if>
+				<if test="uno11 != null and uno11 != ''">
+					and uno11 = #{uno11}
+				</if>
+				<if test="uno12 != null and uno12 != ''">
+					and uno12 = #{uno12}
+				</if>
+				<if test="uno13 != null and uno13 != ''">
+					and uno13 = #{uno13}
+				</if>
+				<if test="uno14 != null and uno14 != ''">
+					and uno14 = #{uno14}
+				</if>
+			<if test="userno != null and userno != ''">
+				union all 
+				select '-2' as clevel,count(1) as num,'直属会员' as name from  tb_hy_user_relation 
+				where userno in (select userno  from tb_hy_user where orgtype =2)
+				and parentno =#{userno}
+			</if>
+	</select>
+	
+	<select id="findUseMoney" parameterType="java.util.Map" resultType="java.util.Map">
+			select coalesce(sum(COALESCE(t3.ALLQUITY,0)),0) as enable from (
+				SELECT USERNO, max( FDATE ) AS FDATE FROM tb_zj_usermoney GROUP BY USERNO
+			) t2
+			LEFT JOIN tb_zj_usermoney t3 ON t2.FDATE = t3.FDATE and t2.userno = t3.userno
+			left join tb_hy_user_relation t5 on t2.userno = t5.userno
+			<where>
+				<if test="uno1 != null and uno1 != ''">
+					and t5.uno1 = #{uno1}
+				</if>
+				<if test="uno2 != null and uno2 != ''">
+					and t5.uno2 = #{uno2}
+				</if>
+				<if test="uno3 != null and uno3 != ''">
+					and t5.uno3 = #{uno3}
+				</if>
+				<if test="uno4 != null and uno4 != ''">
+					and t5.uno4 = #{uno4}
+				</if>
+				<if test="uno5 != null and uno5 != ''">
+					and t5.uno5 = #{uno5}
+				</if>
+				<if test="uno6 != null and uno6 != ''">
+					and t5.uno6 = #{uno6}
+				</if>
+				<if test="uno7 != null and uno7 != ''">
+					and t5.uno7 = #{uno7}
+				</if>
+				<if test="uno8 != null and uno8 != ''">
+					and t5.uno8 = #{uno8}
+				</if>
+				<if test="uno9 != null and uno9 != ''">
+					and t5.uno9 = #{uno9}
+				</if>
+				<if test="uno10 != null and uno10 != ''">
+					and t5.uno10 = #{uno10}
+				</if>
+				<if test="uno11 != null and uno11 != ''">
+					and t5.uno11 = #{uno11}
+				</if>
+				<if test="uno12 != null and uno12 != ''">
+					and t5.uno12 = #{uno12}
+				</if>
+				<if test="uno13 != null and uno13 != ''">
+					and t5.uno13 = #{uno13}
+				</if>
+				<if test="uno14 != null and uno14 != ''">
+					and t5.uno14 = #{uno14}
+				</if>
+				<if test="parentno != null and parentno != ''">
+					and t5.parentno = #{parentno}
+				</if>
+			</where>
+	</select>
+	
+	<select id="findUserLevelCount" parameterType="java.util.Map" resultType="java.util.Map">
+		  select uno1 as USERNO,USERNAME,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+		  ,sum(REALMONEY) as REALMONEY,'1' as clevel,'1' as orgtype from (
+			  select t1.*,t2.uno1,t4.username  from (
+				SELECT userno,count(1) as num,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+				,sum(case when loss &lt; 0 then loss * -1 else 0 end) as REALMONEY 
+				FROM  tb_jy_order where buyorsal = 'B'
+					<if test="btime != null and btime != ''">
+						and ORDTIME &gt;= #{btime}
+					</if>
+					<if test="etime != null and etime != ''">
+						and ORDTIME &lt;= #{etime}
+					</if>
+					<if test="mode != null and mode != ''">
+						and mode = #{mode}
+					</if>
+					group by USERNO
+				) t1
+				left join tb_hy_user_relation t2 on t1.userno = t2.USERNO
+				left join tb_hy_user t3 on t1.userno = t3.userno
+				left join tb_hy_user t4 on t2.uno1 = t4.userno
+				where t4.ORGTYPE = 1
+			) t group by uno1,username
+			<if test="page != null and page != ''">
+				limit #{page},#{size}
+			</if>
+	</select>
+	<select id="findUserLevelCountSum" parameterType="java.util.Map" resultType="java.util.Map">
+		  select count(1) as TOTAL,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+		  ,sum(REALMONEY) as REALMONEY from (
+			  select uno1 as userno,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+			  ,sum(REALMONEY) as REALMONEY from (
+				  select t1.*,t2.uno1  from (
+					SELECT userno,count(1) as num,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+					,sum(case when loss &lt; 0 then loss * -1 else 0 end) as REALMONEY 
+					FROM  tb_jy_order where buyorsal = 'B'
+						<if test="btime != null and btime != ''">
+							and ORDTIME &gt;= #{btime}
+						</if>
+						<if test="etime != null and etime != ''">
+							and ORDTIME &lt;= #{etime}
+						</if>
+						<if test="mode != null and mode != ''">
+							and mode = #{mode}
+						</if>
+						group by USERNO
+					) t1
+					left join tb_hy_user_relation t2 on t1.userno = t2.USERNO
+					left join tb_hy_user t3 on t1.userno = t3.userno
+					left join tb_hy_user t4 on t2.uno1 = t4.userno
+					where t4.ORGTYPE = 1
+				) t group by uno1
+			 ) t
+	</select>
+	
+	<select id="findSubLevelCount" parameterType="java.util.Map" resultType="java.util.Map">
+		  select t1.*,t2.username,t2.orgtype,t3.clevel from (
+				select uno as USERNO,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+						  ,sum(REALMONEY) as REALMONEY from (
+							  select t1.*,${uno} as uno   from (
+								SELECT userno,count(1) as num,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+								,sum(case when loss &lt; 0 then loss * -1 else 0 end) as REALMONEY 
+								FROM  tb_jy_order where buyorsal = 'B'
+									<if test="btime != null and btime != ''">
+										and ORDTIME &gt;= #{btime}
+									</if>
+									<if test="etime != null and etime != ''">
+										and ORDTIME &lt;= #{etime}
+									</if>
+									<if test="mode != null and mode != ''">
+										and mode = #{mode}
+									</if>
+									group by USERNO
+								) t1
+								left join tb_hy_user_relation t2 on t1.userno = t2.USERNO
+								left join tb_hy_user t3 on t1.userno = t3.userno
+								where ${pno} = #{parentno}
+							) t group by uno
+				) t1 
+				left join tb_hy_user t2 on t1.USERNO = t2.userno
+				left join tb_hy_user_relation t3 on t1.userno = t3.USERNO
+			<if test="page != null and page != ''">
+				limit #{page},#{size}
+			</if>
+	</select>
+	<select id="findSubLevelCountSum" parameterType="java.util.Map" resultType="java.util.Map">
+		  select count(1) as TOTAL,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+		  ,sum(REALMONEY) as REALMONEY   from (
+				select uno as USERNO,sum(NUM) as NUM,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+						  ,sum(REALMONEY) as REALMONEY from (
+							  select t1.*,${uno} as uno   from (
+								SELECT userno,count(1) as num,sum(BAILMONEY) as BAILMONEY,sum(LOSS) as LOSS,sum(COMM) as COMM
+								,sum(case when loss &lt; 0 then loss * -1 else 0 end) as REALMONEY 
+								FROM  tb_jy_order where buyorsal = 'B'
+									<if test="btime != null and btime != ''">
+										and ORDTIME &gt;= #{btime}
+									</if>
+									<if test="etime != null and etime != ''">
+										and ORDTIME &lt;= #{etime}
+									</if>
+									<if test="mode != null and mode != ''">
+										and mode = #{mode}
+									</if>
+									group by USERNO
+								) t1
+								left join tb_hy_user_relation t2 on t1.userno = t2.USERNO
+								left join tb_hy_user t3 on t1.userno = t3.userno
+								where ${pno} = #{parentno}
+							) t group by uno
+				) t1 
+			
+	</select>
+</mapper>

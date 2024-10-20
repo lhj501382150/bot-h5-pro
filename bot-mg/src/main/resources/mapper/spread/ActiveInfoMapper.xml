@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hml.mall.mapper.spread.ActiveInfoMapper">
+
+	<select id="findPageByUser" parameterType="java.util.Map" resultType="com.hml.mall.entity.user.User">
+		select t.* from (
+		select t1.*,t2.PARENTNO as parentno,t2.TJNO as tjno 
+		,coalesce(t3.tjnum,0) as tjnum
+		,(case when t4.userno is null then 'N' else 'Y' end) as isCARD
+		from tb_hy_user t1 
+		left join TB_HY_USER_RELATION t2 on t1.USERNO = t2.USERNO
+		left join (
+			select tjno as userno,count(1) as tjnum from (
+				select t1.userno,t1.TJNO,COALESCE(t2.lognum,0) as lognum from tb_hy_user_relation t1 
+				left join (select userno,count(1) as lognum from tb_sys_login_log where ISSUCCESS = 1 and INOROUT = 1 group by userno) t2 
+				on t1.USERNO = t2.USERNO
+				where tjno != '' 
+				<if test="lognum !=null and lognum != ''">
+					and t2.lognum  >= #{lognum} 
+				</if> 
+			) t group by tjno
+		) t3 on t1.userno = t3.userno 
+		left join (select distinct userno from tb_hy_user_cardinfo where CTYPE = 'C') t4 on t1.userno = t4.userno
+		where t1.userno not in(select userno from tb_jl_active_info where actid =#{actid})
+		<if test="bdate !=null and bdate != '' ">
+		  and t1.userno in (
+				SELECT DISTINCT userno FROM tb_jy_contract t1
+				where OPENFLAT = 'A' and STATUS = 3
+				<if test="bdate!=null and bdate != ''">
+					and fdate >= #{bdate} 
+				</if>
+				<if test="edate!=null and edate != ''">
+					and fdate &lt;= #{edate} 
+				</if>
+			)
+		</if>
+		) t 		
+		<where>
+			<if test="regdate_ge !=null and regdate_ge != ''">
+				and regdate >= #{regdate_ge} 
+			</if>
+			<if test="regdate_le !=null and regdate_le != ''">
+				and regdate &lt;= #{regdate_le} 
+			</if>
+			<if test="userno !=null and userno != ''">
+				and userno  = #{userno} 
+			</if> 
+			<if test="username !=null and username != ''">
+				and username  like concat('%',#{username},'%') 
+			</if> 
+			<if test="parentno !=null and parentno != ''">
+				and parentno  = #{parentno} 
+			</if> 
+			<if test="tjno !=null and tjno != ''">
+				and tjno  = #{tjno} 
+			</if> 
+			<if test="tjnum !=null and tjnum != ''">
+				and tjnum  >= #{tjnum} 
+			</if> 
+			<if test="iscard !=null and iscard != ''">
+				and iscard  = #{iscard} 
+			</if> 
+			<if test="realstatus !=null and realstatus != ''">
+				and realstatus  = #{realstatus} 
+			</if> 
+		</where>
+		<if test="pageIndex !=null">
+			order by userno
+			limit #{pageIndex},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="findPageByUserCount" parameterType="java.util.Map" resultType="java.util.Map">
+		select count(1) as TOTAL from (
+		select t1.*,t2.PARENTNO as parentno,t2.TJNO as tjno ,t3.tjnum
+		,(case when t4.userno is null then 'N' else 'Y' end) as isCARD
+		from tb_hy_user t1 
+		left join TB_HY_USER_RELATION t2 on t1.USERNO = t2.USERNO
+		left join (select tjno as userno,count(1) as tjnum from tb_hy_user_relation where tjno != '' group by tjno) t3 on t1.userno = t3.userno 
+		left join (select distinct userno from tb_hy_user_cardinfo where CTYPE = 'C') t4 on t1.userno = t4.userno
+		where t1.userno not in(select userno from tb_jl_active_info where actid =#{actid})
+		<if test="(bdate !=null and bdate != '') or (wareno !=null and wareno != '')">
+			and t1.userno in (
+				SELECT DISTINCT userno FROM tb_jy_contract t1
+				where OPENFLAT = 'A' and STATUS = 3
+				<if test="bdate!=null and bdate != ''">
+					and fdate >= #{bdate} 
+				</if>
+				<if test="edate!=null and edate != ''">
+					and fdate &lt;= #{edate} 
+				</if>
+				<if test="wareno !=null and wareno != ''">
+					and wareno  = #{wareno} 
+				</if> 
+			)
+		</if>
+		) t 		
+		<where>
+			<if test="userno !=null and userno != ''">
+				and userno  = #{userno} 
+			</if> 
+			<if test="parentno !=null and parentno != ''">
+				and parentno  = #{parentno} 
+			</if> 
+			<if test="tjno !=null and tjno != ''">
+				and tjno  = #{tjno} 
+			</if> 
+			<if test="iscard !=null and iscard != ''">
+				and iscard  = #{iscard} 
+			</if> 
+			<if test="realstatus !=null and realstatus != ''">
+				and realstatus  = #{realstatus} 
+			</if> 
+		</where>
+	</select>
+	
+	<select id="findUserByHold" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT T.* FROM (
+			SELECT USERNO ,COUNT(1) AS NO 
+			,GROUP_CONCAT(NUM) AS INFO
+			FROM (
+				SELECT USERNO,CONCAT(WARENO,'-',SUM(NUM)) AS NUM  FROM TB_HY_USER_DIGITART 
+				WHERE CARDSTATUS IN ('2','4')
+				AND USERNO IN 
+				<foreach item="val" collection="userno" open="(" separator="," close=")" >
+					#{val}
+				</foreach>
+				AND WARENO IN  
+				<foreach item="val" collection="wareno" open="(" separator="," close=")" >
+					#{val}
+				</foreach>
+				GROUP BY USERNO,WARENO 
+			) T GROUP BY USERNO 
+		) T WHERE NO >= #{no}
+	</select>
+	
+	<select id="findActive2" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT T.* FROM (
+			SELECT USERNO ,COUNT(1) AS NO 
+			,GROUP_CONCAT(NUM) AS INFO
+			FROM (
+				SELECT USERNO,CONCAT(WARENO,'-',SUM(NUM)) AS NUM  FROM TB_JY_CONTRACT 
+				WHERE OPENFLAT = 'A' AND STATUS = 3
+				AND USERNO IN 
+				<foreach item="val" collection="userno" open="(" separator="," close=")" >
+					#{val}
+				</foreach>
+				AND WARENO IN  
+				<foreach item="val" collection="wareno" open="(" separator="," close=")" >
+					#{val}
+				</foreach>
+				GROUP BY USERNO,WARENO 
+			) T GROUP BY USERNO 
+		) T WHERE NO >= #{no}
+	</select>
+
+	<select id="findActive7" parameterType="java.util.Map" resultType="com.hml.mall.entity.user.User">
+		select userno from (
+			select userno,sum(BAILMONEY) as money from tb_jy_contract 
+			where BUYORSAL = 'B'
+			<if test="bdate!=null and bdate != ''">
+				and fdate >= #{bdate} 
+			</if>
+			<if test="edate!=null and edate != ''">
+				and fdate &lt;= #{edate} 
+			</if>
+			group by userno 
+		) t order by money desc 
+		<if test="start != null and start != '' and end != null and end != '' ">
+			limit ${start},${end}
+		</if>
+		
+	</select>
+
+</mapper>

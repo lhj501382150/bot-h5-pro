@@ -1,0 +1,3 @@
+echo start build....
+
+npm run build

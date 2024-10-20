@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hml.mall.mapper.reward.ShareTotalMapper">
+
+	<insert id="saveTotal" parameterType="java.lang.String">
+		replace into tb_jl_share_total(PDATE,USERNO,PNUM,RATE,CONSUMN,BONUS,STATUS)
+		SELECT
+			t1.FDATE,
+			t1.TJNO,
+			t2.PNUM,
+			t2.RATE,
+			t1.CONSUMN,
+			t2.RATE * t1.CONSUMN / 100 AS BONUS,
+			'0' 
+		FROM
+			(
+					SELECT
+						t1.FDATE,
+						sum( t1.PRICE * t1.NUM ) AS CONSUMN,
+						t2.TJNO 
+					FROM
+						tb_jy_contract t1
+						JOIN tb_hy_user_relation t2 ON t1.USERNO = t2.USERNO 
+						AND t2.TJNO != '' 
+					WHERE
+						t1.FDATE = #{fdate} AND t1.STATUS IN('3','6')
+					GROUP BY
+						t2.TJNO 
+			) T1
+		JOIN (
+				SELECT
+					t1.TJNO,
+					t1.PNUM,
+					IFNULL( t2.RATE, 0 ) AS RATE 
+				FROM
+					( SELECT TJNO, count( 1 ) AS PNUM FROM tb_hy_user_relation WHERE TJNO != '' GROUP BY TJNO ) t1
+					LEFT JOIN tb_jl_share_paras t2 ON t1.PNUM >= t2.MINNUM 
+					AND t1.PNUM &lt;= t2.MAXNUM 
+		) T2 ON t1.TJNO = t2.TJNO
+	</insert>
+	<insert id="saveHandle" parameterType="java.lang.String">
+		insert into tb_jl_share_handle(PDATE,USERNO,CONSUMN,BONUS,PSTATUS)
+		select PDATE,USERNO,CONSUMN,BONUS，'0' from tb_jl_share_total
+		where PDATE = #{fdate} and STATUS = 0
+	</insert>
+	
+	<update id="updateTotal" parameterType="java.lang.String">
+		update tb_jl_share_total set STATUS =1 where PDATE = #{fdate} and status = 0
+	</update>
+</mapper>

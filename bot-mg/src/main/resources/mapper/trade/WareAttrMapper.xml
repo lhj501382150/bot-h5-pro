@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hml.mall.mapper.trade.WareAttrMapper">
+
+	<select id="selectWareAttr" parameterType="com.hml.mall.entity.trade.Ware" resultType="com.hml.mall.entity.trade.WareAttr">
+	 	select t1.cno,t1.attr_key,t1.attr_name,t2.wareno,t2.attr_val from tb_jy_wareclass_attrcol t1
+		left join tb_jy_ware_attr t2 on t1.cno =t2.cno  and t2.wareno =#{wareno}
+		where t1.cno =#{cno}
+	 </select>
+</mapper>
