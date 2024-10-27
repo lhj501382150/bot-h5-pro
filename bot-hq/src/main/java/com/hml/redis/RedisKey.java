@@ -11,6 +11,10 @@ public class RedisKey {
 	public static String ORDER_QUERY_N = "ORDER_QUERY_N:" + BotConfig.CHAT_ID;
 	public static String ORDER_RESULT_N = "ORDER_RESULT_N:" + BotConfig.CHAT_ID;
 	
+	public static String CURRENT_STATUS_MODE = "CURRENT_STATUS_MODE:";
+	public static String ORDER_QUERY_MODE = "ORDER_QUERY_MODE:";
+	public static String ORDER_RESULT_MODE = "ORDER_RESULT_MODE:";
+	
 	public static String ROB_MIN_MONEY = "ROB_MIN_MONEY";
 	public static String ROB_MAX_MONEY = "ROB_MAX_MONEY";
 	

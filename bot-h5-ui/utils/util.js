@@ -59,7 +59,6 @@ export const getSecond = (time) =>{
 	}
 	return timeDifferenceInSeconds;
 }
-
 export const getCurTime = ()=>{
 	 const date = new Date();
       const hours = ("0" + date.getHours()).slice(-2);

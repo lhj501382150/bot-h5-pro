@@ -17,6 +17,7 @@ public class DataSource implements Serializable {
     private Long id;
     private Long botId;
     private Long drawIssue;
+    private String result;
     private String sResult;
     private String sTime;
     private String mode;

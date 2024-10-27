@@ -2,7 +2,7 @@
 	<view class="qmbd-game">
 		<uni-nav-bar  title="四方通宝" background-color="rgb(250,81,81)" color="#fff" left-icon="back" :border="false" right-text="规则" @clickLeft="goBack" @clickRight="openRule"></uni-nav-bar>
 		<view class="tab-bar">
-			<view class="tab-item" :class="tabIndex==0 ? 'active':''">宝斗</view>
+			<view class="tab-item" :class="tabIndex==0 ? 'active':''">{{modeName}}</view>
 			<view class="tab-item" :class="tabIndex==1 ? 'active':''" @click="goRecord">下注记录</view>
 		</view>
 		<view class="row">
@@ -11,7 +11,6 @@
 				<view class="tips">{{result.RESULT}}</view>
 				<view class="tips">{{getStatus(result.RESULT)}}</view>
 			</view>
-			<view class="link-btn" @click="goUrl">{{link.title}}</view>
 		</view>
 		<view class="row">
 			<view class="num-item" v-for="(item,index) in result.data" :key="index" :class="'color'+item">
@@ -288,12 +287,17 @@
 				errMsg:'',
 				curStatus:false,
 				showNotice:false,
-				tempShowNotice:false
+				tempShowNotice:false,
+				modeName:'',
+				mode:'',
+				modeTime:5
 			}
 		},
 		onLoad() {
-			// this.getUserBalance()
-			// this.loadData()
+			this.modeName = uni.getStorageSync('xz_name')
+			this.mode = uni.getStorageSync('xz_mode')
+			this.modeTime = uni.getStorageSync('xz_time')
+			 
 			this.getShowNoticePara()
 			this.connectSocketInit()
 			let user = JSON.parse(uni.getStorageSync('userinfo'))
@@ -323,7 +327,7 @@
 				let para = {
 					pageIdx:0,
 					pageSize:50,
-					mode:"0",
+					mode:this.mode,
 					userno :uni.getStorageSync('userno')
 				}
 				this.$http.post("/Query/ReustList",para,res => {
@@ -355,7 +359,7 @@
 					})
 				}
 				let pwd = md5(userno+userno)
-				let url = webSocketUrl + 'bd/' + userno+"/" + pwd;
+				let url = webSocketUrl + 'bd'+this.modeTime+'/' + userno+"/" + pwd;
 				this.socketTask = uni.connectSocket({
 					url: url ,
 					success(data) {
@@ -389,6 +393,7 @@
 								}
 								this.showNotice = this.tempShowNotice
 								this.result = JSON.parse(data.data)
+								
 								this.result.data = this.result.CODE.split(',') || []
 								this.leftTime = getSecond(this.result.TIME) + 15
 								this.fillTime()
@@ -397,7 +402,14 @@
 							}else if(data.status == 4){
 								this.isStop = true
 								this.fptime = 0
-								this.kjtime = 30
+								if(this.modeTime == 5){
+									this.kjtime = 30
+								}else if(this.modeTime == 3){
+									this.kjtime = 20
+								}else{
+									this.kjtime = 15
+								}
+								
 								this.getShowNoticePara()
 							}
 						}catch(e){
@@ -431,7 +443,13 @@
 				this.timer = setTimeout(this.startCount,1000)
 			},
 			fillTime(){
-				this.fptime = this.leftTime - 30 < 0 ? 0 :this.leftTime - 30
+				let time = 30
+				if(this.modeTime == 3){
+					time = 20
+				}else if (this.modeTime == 1){
+					time = 15
+				}
+				this.fptime = this.leftTime - time < 0 ? 0 :this.leftTime - time
 				this.kjtime = this.leftTime
 				this.startCount()
 			},
@@ -487,6 +505,7 @@
 				let para = {
 					botId:botId,
 					dataId:this.result.ID,
+					mode:this.mode,
 					userId:uni.getStorageSync('userno'),
 					userName:uni.getStorageSync("nickname"),
 					orders:orders
@@ -551,9 +570,9 @@
 				item.check = !item.check
 			},
 			goRecord(){
-				uni.setStorageSync('record_mode',0)
+				uni.setStorageSync('record_mode',this.mode)
 				uni.navigateTo({
-					url:'/pages/record/record'
+					url:'/pages/user/order'
 				})
 			},
 			goUrl(){

@@ -7,9 +7,13 @@
 			<uni-notice-bar scrollable single showIcon :text="notice" :speed="50" background-color="rgb(219,202,80)" color="#000" more-color="#000" :showGetMore="true" @getmore="showDetail"></uni-notice-bar>
 		</view>
 		<view class="games">
-			<view  v-for="(item,index) in games" :key="index" class="game-item" @click="showGame(item)">
-				<img :src="item.img"/>
-				<view class="game-name">{{item.name}}</view>
+			<view  v-for="(item,index) in games" :key="index" class="game-item">
+				<view class="title">{{item.name}}</view>
+				<view class="oper-btn">
+					<view @click="showGame(item)">立即试玩</view>
+					<view @click="goRecord(item)">投注记录</view>
+					<view @click="goResult(item)">历史开奖</view>
+				</view>
 			</view>
 		</view>
 		<sys-status></sys-status>
@@ -27,9 +31,14 @@
 				notice:'公告：每天下午2:00-2:15系统自动维护15分钟',
 				noticeno:'',
 				games:[
-					{name:'四方通宝',img:'../../static/images/home/logo.png',path:'./qmbd'},
-					{name:'四方牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn'}
-					
+					{name:'四方通宝',img:'../../static/images/home/logo.png',path:'./qmbd',mode:0,time:5},
+					{name:'四方牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
+					{name:'哈希1分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:2,time:1},
+					{name:'哈希1分牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:5,time:1},
+					{name:'哈希3分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:3,time:3},
+					{name:'哈希3分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:6,time:3},
+					{name:'哈希5分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:4,time:5},
+					{name:'哈希5分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:7,time:5},
 				],
 				search:{
 					pageIdx:0,
@@ -48,8 +57,25 @@
 				})
 			},
 			showGame(item){
+				uni.setStorageSync('xz_mode',item.mode)
+				uni.setStorageSync('xz_name',item.name)
+				uni.setStorageSync('xz_time',item.time)
 				uni.navigateTo({
 					url:item.path
+				})
+			},
+			goRecord(item){
+				uni.setStorageSync('record_mode',item.mode)
+				uni.setStorageSync('record_name',item.name)
+				uni.navigateTo({
+					url:'/pages/user/order'
+				})
+			},
+			goResult(item){
+				uni.setStorageSync('result_mode',item.mode)
+				uni.setStorageSync('result_name',item.name)
+				uni.navigateTo({
+					url:'/pages/user/result'
 				})
 			},
 			loadNotice(){
@@ -100,9 +126,31 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			img{
+			border: 1px solid #e2e2e2;
+			margin-bottom: 20upx;
+			.title{
 				width: 100%;
-				height: 310upx;
+				line-height: 80upx;
+				text-align: center;
+				font-size: 40upx;
+				font-weight: 800;
+				letter-spacing: 2px;
+				background-color: #e2e2e2;
+				padding: 10upx;
+			}
+			.oper-btn{
+				width: 100%;
+				line-height: 40upx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 24upx;
+				color: #ffffff;
+				background: linear-gradient(90deg,#2894ff,#66b3ff);
+				padding: 10upx;
+				view{
+					
+				}
 			}
 		}
 	}

@@ -1,11 +1,6 @@
 <template>
 	<view class="result">
 		<uni-nav-bar left-icon="left"  title="开奖公告" background-color="rgb(40,148,255)" color="#fff" :border="false" @clickLeft="goBack"></uni-nav-bar>
-		<view class="tab-bar">
-			<view class="tab-item"  :class="item.clevel == mode ? 'active':''" v-for="(item,index) in tabs" :key="index" @click="findData(item)">
-				{{item.name}}
-			</view>
-		</view>
 		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 95%;"
 		        @refresherrefresh="getRefresherrefresh" :refresher-enabled="false" :refresher-triggered="refresherTriggered"
 		        refresher-background="transparent">
@@ -13,8 +8,7 @@
 				 <view class="record-item" v-for="(item,index) in records" :key="index">
 					  <view class="head">
 						  <view class="type">
-							  <text v-if="mode==0">四方宝斗</text>
-							  <text v-else-if="mode==1">四方牛牛</text>
+							  {{modeName}}
 						  </view>
 						  <view class="draw">{{item.issue}}期</view>
 						   <view class="time">{{item.sTime}}</view>
@@ -46,22 +40,18 @@
 				tabs:[
 					{clevel:0,name:'宝斗'},
 					{clevel:1,name:'牛牛'}
-				]
+				],
+				modeName:'',
+				type:'',// 0 宝斗  1 牛牛
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			this.modeName = uni.getStorageSync('result_name')
+			this.mode = uni.getStorageSync('result_mode')
 			this.records = []
 			this.loadData()
 		},
 		methods: {
-			findData(item){
-				this.mode = item.clevel
-				this.search.pageIdx = 0
-				this.totalPage = 1
-				this.totalCount = 0
-				this.records = []
-				this.loadData()
-			},
 			scrolltolower() {
 				if (this.records.length >= this.totalCount) return
 				this.loadData()
@@ -96,7 +86,7 @@
 			},
 			goBack(){
 				uni.switchTab({
-					url:'/pages/user/user'
+					url:'/pages/home/home'
 				})
 			}
 		}

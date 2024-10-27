@@ -19,6 +19,7 @@
 			
 			
 			<button type="primary" class="query-btn" size="mini" @click="searchUserData" :loading="isLoading" :disabled="isLoading">查询</button>
+			<button class="time-btn" size="mini" @click="searchBytime(4)"  :disabled="isLoading">昨天</button>
 			<button class="time-btn" size="mini" @click="searchBytime(1)"  :disabled="isLoading">今天</button>
 			<button class="time-btn" size="mini" @click="searchBytime(2)"  :disabled="isLoading">本周</button>
 			<button class="time-btn" size="mini" @click="searchBytime(3)"  :disabled="isLoading">上周</button>
@@ -119,7 +120,13 @@
 				],
 				modes:[
 					{value:0,text:'宝斗'},
-					{value:1,text:'牛牛'}
+					{value:1,text:'牛牛'},
+					{value:2,text:'哈希1分宝斗'},
+					{value:3,text:'哈希3分宝斗'},
+					{value:4,text:'哈希5分宝斗'},
+					{value:5,text:'哈希1分牛牛'},
+					{value:6,text:'哈希3分牛牛'},
+					{value:7,text:'哈希5分牛牛'}
 				],
 				userno:'',
 				clevel:'',
@@ -183,6 +190,17 @@
 					this.searchForm.endDate = formatDate(time + 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
 				}
 			},
+			getYestorday(){
+				var time = new Date().getTime();
+				const curTime = getCurTime()
+				if(curTime<'070000'){
+					this.searchForm.startDate = formatDate(time - 1000 * 60 * 60 * 24 * 2,2) + ' 07:00:00'
+					this.searchForm.endDate = formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
+				}else{
+					this.searchForm.startDate = formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 07:00:00'
+					this.searchForm.endDate = formatDate(time,2) + ' 06:00:00'
+				}
+			},
 			searchBytime(type){
 				if(type==1){
 					this.getToday()
@@ -194,6 +212,8 @@
 					let date = getWeekStartEndDates(-1)
 					this.searchForm.startDate = date.startOfWeek + ' 07:00:00'
 					this.searchForm.endDate = date.endOfWeek + ' 06:00:00'
+				}else if(type ==4){
+					this.getYestorday()
 				}
 				this.searchUserData()
 			},

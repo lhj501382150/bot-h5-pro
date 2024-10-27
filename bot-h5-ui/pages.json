@@ -40,6 +40,22 @@
 			}
 		},
 		{
+			"path" : "pages/home/hxbd",
+			"style" : 
+			{
+				"enablePullDownRefresh" : false,
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path" : "pages/home/hxnn",
+			"style" : 
+			{
+				"enablePullDownRefresh" : false,
+				"navigationStyle":"custom"
+			}
+		},
+		{
 			"path" : "pages/login/login",
 			"style" : 
 			{
@@ -154,12 +170,6 @@
 				"selectedIconPath": "static/images/tabbar/home1.png",
 				"iconPath": "static/images/tabbar/home.png",
 				"text": "首页"
-			},
-			{
-				"pagePath": "pages/record/record",
-				"selectedIconPath": "static/images/tabbar/record1.png",
-				"iconPath": "static/images/tabbar/record.png",
-				"text": "投注记录"
 			},
 			{
 				"pagePath": "pages/user/user",

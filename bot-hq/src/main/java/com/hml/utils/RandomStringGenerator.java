@@ -7,40 +7,37 @@ public class RandomStringGenerator {
 
     private static final String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String CHAR_UPPER = CHAR_LOWER.toUpperCase();
-    private static final String NUMBER = "0123456789"; // 不包括0，以保证1-9之间数字至少出现一次
+    private static final String NUMBER = "0123456789"; // 以保证1-9之间数字至少出现一次
     private static final String ALL_CHAR = CHAR_LOWER + CHAR_UPPER + NUMBER;
     private static final SecureRandom random = new SecureRandom();
 
     public static String replaceNum(String str,String nums) {
-    	nums = nums.replace("10", "0");
-    	char[] arr = str.toCharArray();
-    	String[] numArr = nums.split(",");
-    	int i = 0;
-    	StringBuffer buff = new StringBuffer();
-    	for(char c : arr) {
-    		if(Character.isDigit(c)) {
-    			String tempStr = buff.toString();
-    			if(i < numArr.length && !tempStr.contains(String.valueOf(c))) {
-    				buff.append(numArr[i]);
-    				i++;
-    			}else {
-    				buff.append(c);
-    			}
-    		}else {
-    			buff.append(c);
-    		}
+    	nums = nums.replace("10", "A");
+    	nums = nums.replaceAll("0", "");
+    	nums = nums.replace("A", "0");
+    	String result = getResult(str);
+    	result = result.replace("10", "A");
+    	result = result.replaceAll("0", "");
+    	result = result.replace("A", "0");
+    	String[] numss = nums.split(",");
+    	String[] results = result.split(",");
+    	 
+    	for(int i=0;i < results.length;i++) {
+    		str = str.replaceAll(results[i], results[i]+"_A");
     	}
-    	return buff.toString();
+    	for(int i=0;i < results.length;i++) {
+    		str = str.replaceAll(results[i]+"_A", numss[i]);
+    	}
+    	return str;
+    	
     }
     public static String getHashStr() {
         StringBuilder sb = new StringBuilder(64);
 
         // 首先确保1-9之间的数字至少出现一次
         for (int i = 0; i < NUMBER.length(); i++) {
-            int index = random.nextInt(NUMBER.length());
-            sb.append(NUMBER.charAt(index));
+            sb.append(NUMBER.charAt(i));
         }
-
         // 填充剩余的部分
         for (int i = 10; i < 64; i++) {
             int index = random.nextInt(ALL_CHAR.length());
@@ -68,13 +65,15 @@ public class RandomStringGenerator {
         }
         
         String uniqueDigitsStr = uniqueDigitsToString(uniqueDigits);
-        uniqueDigitsStr = uniqueDigitsStr.replace("0", "10");
+        uniqueDigitsStr = uniqueDigitsStr.replace("00", "10");
         return uniqueDigitsStr;
     }
     public static String uniqueDigitsToString(List<Character> uniqueDigits) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < uniqueDigits.size(); i++) {
-            sb.append(uniqueDigits.get(i));
+        	String num = "0" + String.valueOf(uniqueDigits.get(i));
+        	 
+            sb.append(num);
             if (i < uniqueDigits.size() - 1) {
                 sb.append(",");
             }
@@ -88,8 +87,7 @@ public class RandomStringGenerator {
 		String result = getResult(hashStr);
 		
 		System.out.println(result);
-		result = "10,9,1,7,3,8,4,5";
-		result = result.replace("10", "0");
+		result = "07,10,06,08,09,04,03,05,01,02";
 		String str = replaceNum(hashStr, result);
 		System.out.println(str);
 		result = getResult(str);

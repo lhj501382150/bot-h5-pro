@@ -12,7 +12,7 @@
 		        refresher-background="transparent">
 			<view class="record-list">
 				 <view class="record-item" v-for="(item,index) in records" :key="index">
-					 <template v-if="item.mode==0">
+					 <template v-if="getModeType(item.mode)==0">
 						 <view class="left" >
 							 <view class="row" v-if="userinfo.orgtype==1">所属账号：{{item.userno}}</view>
 							  <view class="row">下注单号：No.{{item.orderno}}</view>
@@ -37,7 +37,7 @@
 							  </view>
 						 </view>
 					 </template>
-					 <template v-else-if="item.mode==1">
+					 <template v-else-if="getModeType(item.mode)==1">
 						 <view class="left" >
 							 <view class="row" v-if="userinfo.orgtype==1">所属账号：{{item.userno}}</view>
 							  <view class="row">下注单号：No.{{item.orderno}}</view>
@@ -140,7 +140,9 @@
 				tabs:[
 					{clevel:0,name:'宝斗'},
 					{clevel:1,name:'牛牛'}
-				]
+				],
+				modeName:'',
+				modeType:0,// 0 宝斗 1 牛牛
 			}
 		},
 		onLoad(option) {
@@ -149,6 +151,8 @@
 			this.userno = option.userno || this.userinfo.userno
 			this.startDate = option.startDate
 			this.endDate = option.endDate
+			this.modeName = uni.getStorageSync('record_name')
+			this.mode = uni.getStorageSync('record_mode')
 			this.records = []
 			this.loadData()
 		},
@@ -160,6 +164,17 @@
 			this.endDate = ''
 		},
 		methods: {
+			getModeType(mode){
+				let modeType = 0
+				if(mode >= 0){
+					if(mode <=4 && mode != 1){
+						modeType = 0
+					}else{
+						modeType = 1
+					}
+				}
+				return modeType
+			},
 			findData(item){
 				this.mode = item.clevel
 				this.search.pageIdx = 0
