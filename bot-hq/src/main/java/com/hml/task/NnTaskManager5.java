@@ -1,34 +1,25 @@
 package com.hml.task;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hml.back.bean.Order;
 import com.hml.back.bean.RespBean;
 import com.hml.bean.CommandTextParser;
 import com.hml.bean.DataSource;
 import com.hml.bot.BaseBot;
 import com.hml.command.BossCommand;
-import com.hml.command.ErrorCommand;
 import com.hml.config.BotConfig;
 import com.hml.redis.RedisKey;
 import com.hml.redis.RedisUtils;
 import com.hml.utils.DateTimeUtils;
 import com.hml.utils.StringUtils;
 import com.hml.websocket.config.WebSocketConfig;
-import com.hml.websocket.server.WebSocketServerNn5;
 import com.hml.websocket.server.WebSocketServerNn5;
 
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +56,7 @@ public class NnTaskManager5 {
 			 long maxId = draw.getId() + 2;
 			 long minId = draw.getId() - 2;
 			 if(dataId < minId || dataId > maxId) {
-				 log.info("历史信息当前期数：{}--{}" ,DrawInfo.ID  ,resp.getDataId());
+				 log.info("历史信息当前期数：{}--{}" ,dataId  ,resp.getDataId());
 				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
 					
 				 log.info("【result】:{}",res);

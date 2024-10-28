@@ -27,11 +27,13 @@ public class NiuTaskManager {
 	@Autowired
 	private RedisUtils redisUtils;
 	
+	private String mode = "1";
+	
 	@Async
 	@Scheduled(fixedRate = 1000)
 	public void syncStatus() {
 		 try {
-			 Object obj = redisUtils.lGetAndPop(RedisKey.CURRENT_STATUS_N);
+			 Object obj = redisUtils.lGetAndPop(RedisKey.CURRENT_STATUS_MODE + mode);
 			 if(StringUtils.isBlank(obj)) {
 				 return;
 			 }
@@ -123,7 +125,7 @@ public class NiuTaskManager {
 		boolean flag = true;
 		int index = 0;
 		while(flag  && index < 5) {
-			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_N);
+			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + mode);
 			  log.info("【QUERY_ORDER_2】:{}",res);
 			  if(res != null) {
 				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
@@ -146,7 +148,7 @@ public class NiuTaskManager {
 		boolean flag = true;
 		int index = 0;
 		while(flag && index < 5) {
-			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_N);
+			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + mode);
 			
 			log.info("【result_2】:{}",res);
 			if(res != null) {
@@ -172,7 +174,7 @@ public class NiuTaskManager {
 	
 	private String getResultKey() {
 		String date = DateTimeUtils.getCurrentDate("yyyyMMdd");
-		String key = RedisKey.ORDER_RESULT_N + ":" + date;
+		String key = RedisKey.ORDER_RESULT_MODE + mode + ":" + date;
 		return key;
 	}
 }
