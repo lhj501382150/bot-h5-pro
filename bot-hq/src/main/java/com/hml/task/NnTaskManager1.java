@@ -26,7 +26,7 @@ import com.hml.websocket.server.WebSocketServerNn1;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@Component
+@Component
 public class NnTaskManager1 {
 
 	@Autowired
@@ -84,7 +84,7 @@ public class NnTaskManager1 {
 					 json.put("ISSUE", draw.getDrawIssue());
 					 json.put("CODE", draw.getSResult());
 					 json.put("RESULT", draw.getResult());
-					 json.put("TIME", draw.getSTime());
+					 json.put("TIME", draw.getNextTime());
 					 json.put("ID", draw.getId());
 					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn1.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
@@ -98,7 +98,7 @@ public class NnTaskManager1 {
 					 json.put("ISSUE", draw.getDrawIssue());
 					 json.put("CODE", draw.getSResult());
 					 json.put("RESULT", draw.getResult());
-					 json.put("TIME", draw.getSTime());
+					 json.put("TIME", draw.getNextTime());
 					 json.put("ID", draw.getId());
 					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn1.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
@@ -163,9 +163,10 @@ public class NnTaskManager1 {
 				redisUtils.hset(key,bean.getDataId(), res);
 				redisUtils.expire(key, 60 * 60 * 24);
 				log.info("存入结果-{}:{}-{}",MODE,bean.getDataId(),res);
-				if(BotConfig.ENABLE  && SysTaskManager.IS_AUTH) {
-					sendTable(bean,"开奖成功!("+bean.getIWinNo() + CommandTextParser.getText(bean.getIWinNo()) +")\n本期期数： " + (DrawInfo.DRAW_ISSUE - 1) ,true);
-				}
+				int dataId = Integer.parseInt(bean.getDataId());
+				if(dataId != draw.getId()) {
+					 continue;
+				 }
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					draw.setResult(String.valueOf(bean.getSReust()));
 //					WebSocketServerNn1.sendInfo(Flow.OVER.getStep(),res.toString());

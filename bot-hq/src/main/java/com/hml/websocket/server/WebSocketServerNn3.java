@@ -57,11 +57,14 @@ public class WebSocketServerNn3 {
 
         try {
         	DataSource item = HqTaskManager.getDraw("HXNN3");
+        	if(item == null) {
+        		item =new DataSource();
+        	}
         	JSONObject json = new JSONObject();
 			json.put("ISSUE", item.getDrawIssue());
 			json.put("CODE", item.getSResult());
 			json.put("RESULT", item.getResult());
-			json.put("TIME", item.getSTime());
+			json.put("TIME", item.getNextTime());
 			json.put("ID", item.getId());
 			json.put("HASH", item.getHash());
             sendMessage(getMsg(1,json.toJSONString()));

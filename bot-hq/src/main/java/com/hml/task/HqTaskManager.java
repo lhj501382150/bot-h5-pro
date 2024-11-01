@@ -141,7 +141,7 @@ public class HqTaskManager {
 	private long getDrawIssue(String key) {
 		String currentDate = DateTimeUtils.getCurrentDate("yyMMdd");
 		key = RedisHqKey.DRAW_ISSUE + key + ":" + currentDate;
-		Object obj = redisUtils.incr(key, 1l);
+		Object obj = redisUtils.get(key);
 		String val = "";
 		if(obj == null) {
 			val = currentDate + "0000";
@@ -185,8 +185,8 @@ public class HqTaskManager {
 		item.setHash(hashStr);
 		item.setSResult(result);
 //		item.setCode(result);
-		item.setSTime(DateTimeUtils.addMinute(minutes));
-		
+		item.setNextTime(DateTimeUtils.addMinute(minutes));
+		item.setSTime(DateTimeUtils.getDateTime());
 		return item;
 	}
 }

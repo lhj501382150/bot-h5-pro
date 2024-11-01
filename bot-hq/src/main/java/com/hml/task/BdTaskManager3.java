@@ -82,7 +82,7 @@ public class BdTaskManager3 {
 					 json.put("ISSUE", draw.getDrawIssue());
 					 json.put("CODE", draw.getSResult());
 					 json.put("RESULT", draw.getResult());
-					 json.put("TIME", draw.getSTime());
+					 json.put("TIME", draw.getNextTime());
 					 json.put("ID", draw.getId());
 					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd3.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
@@ -97,7 +97,7 @@ public class BdTaskManager3 {
 					 json.put("ISSUE", draw.getDrawIssue());
 					 json.put("CODE", draw.getSResult());
 					 json.put("RESULT", draw.getResult());
-					 json.put("TIME", draw.getSTime());
+					 json.put("TIME", draw.getNextTime());
 					 json.put("ID", draw.getId());
 					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd3.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());

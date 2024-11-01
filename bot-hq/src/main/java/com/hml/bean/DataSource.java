@@ -22,4 +22,5 @@ public class DataSource implements Serializable {
     private String sTime;
     private String mode;
     private String hash;
+    private String nextTime;
 }
