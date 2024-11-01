@@ -48,8 +48,11 @@ public class NnTaskManager5 {
 			 if(StringUtils.isBlank(obj)) {
 				 return;
 			 }
-			 log.info("【Redis信息】:{}",obj);
+			 log.info("【Redis-{}信息】:{}",MODE,obj);
 			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 if(draw == null) {
+				 return;
+			 }
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
 			 int step = resp.getIStatus();
 			 int dataId = Integer.parseInt(resp.getDataId());
@@ -78,6 +81,7 @@ public class NnTaskManager5 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn5.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.CONFIRM_ROB.getStep() == step) {
@@ -91,10 +95,12 @@ public class NnTaskManager5 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn5.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.STOP_ORDER.getStep() == step) {
 				 log.info("【STOP_ORDER】：{}",step);
+				 stopOrder(draw);
 				 if(WebSocketConfig.ENABLE && SysTaskManager.IS_AUTH) {
 					 WebSocketServerNn5.sendInfo(Flow.STOP_ORDER.getStep(),"");
 				 }
@@ -112,12 +118,29 @@ public class NnTaskManager5 {
 	}	
 	
 	private void timeTips() throws TelegramApiException {
-		baseBot.execute(bossCommand.sendMessage(BotConfig.CHAT_ID, "下注倒计时:30秒"));
 	}
 	private void start() throws TelegramApiException {
-		getMinMoney();
-		getMaxMoney();
-		baseBot.execute(bossCommand.sendPhoto(BotConfig.CHAT_ID, DrawInfo.MIN_MONEY, null));
+	}
+	private void stopOrder(DataSource draw) throws TelegramApiException {
+//		 查询是否有庄
+		boolean flag = true;
+		int index = 0;
+		while(flag  && index < 5) {
+			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
+			  log.info("【QUERY_ORDER-{}】:{}",MODE,res);
+			  if(res != null) {
+				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
+				  int dataId = Integer.parseInt(bean.getDataId());
+				  if(dataId != draw.getId()) {
+						 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
+						 continue;
+					 }
+				 flag = false;
+			  }else {
+				  index++;
+			  }
+		}
+		  
 	}
 	private void overResult(DataSource draw) throws TelegramApiException, IOException {
 //		 查询是否有庄
@@ -137,8 +160,8 @@ public class NnTaskManager5 {
 					sendTable(bean,"开奖成功!("+bean.getIWinNo() + CommandTextParser.getText(bean.getIWinNo()) +")\n本期期数： " + (DrawInfo.DRAW_ISSUE - 1) ,true);
 				}
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
-					draw.setResult(String.valueOf(bean.getIWinNo()));
-					WebSocketServerNn5.sendInfo(Flow.OVER.getStep(),res.toString());
+					draw.setResult(String.valueOf(bean.getSReust()));
+//					WebSocketServerNn5.sendInfo(Flow.OVER.getStep(),res.toString());
 				 }
 			    flag = false;
 			}else {
@@ -151,36 +174,6 @@ public class NnTaskManager5 {
 	private void sendTable(RespBean bean,String what,boolean flag) throws TelegramApiException {
 		  
 	}
-	 
-	private String getMinMoney() {
-		Object obj = redisUtils.get(RedisKey.ROB_MIN_MONEY);
-		if(!StringUtils.isBlank(obj)) {
-			DrawInfo.MIN_MONEY = obj.toString();
-		}
-		return DrawInfo.MIN_MONEY;
-	}
-	private String getMaxMoney() {
-		Object obj = redisUtils.get(RedisKey.ROB_MAX_MONEY);
-		if(!StringUtils.isBlank(obj)) {
-			DrawInfo.MAX_MONEY = obj.toString();
-		}
-		return DrawInfo.MAX_MONEY;
-	}
-	private String getOrderMinMoney() {
-		Object obj = redisUtils.get(RedisKey.ORDER_MIN_MONEY);
-		if(!StringUtils.isBlank(obj)) {
-			DrawInfo.ORDER_MIN_MONEY = obj.toString();
-		}
-		return DrawInfo.ORDER_MIN_MONEY;
-	}
-	private String getOrderMaxMoney() {
-		Object obj = redisUtils.get(RedisKey.ORDER_MAX_MONEY);
-		if(!StringUtils.isBlank(obj)) {
-			DrawInfo.ORDER_MAX_MONEY = obj.toString();
-		}
-		return DrawInfo.ORDER_MAX_MONEY;
-	}
-	
 	private String getResultKey() {
 		String date = DateTimeUtils.getCurrentDate("yyyyMMdd");
 		String key = RedisKey.ORDER_RESULT_MODE + MODE + ":" + date;

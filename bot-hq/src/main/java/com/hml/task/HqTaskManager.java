@@ -32,13 +32,10 @@ public class HqTaskManager {
 	
 	public static DataSource getDraw(String type) {
 		 DataSource item = dataMap.get(type);
-		 if(item == null) {
-			 item =new DataSource();
-		 }
 		 return item;
 	}
 	//模式编号  0、普通 1、牛牛  2、普通1分 3、普通3分 4、普通5分  5、牛牛1分   6、牛牛3分  7、牛牛5分
-	@Scheduled(fixedRate = 60 * 1000)
+	@Scheduled(cron="10 0/1 * * * ?")
 	public void gethxn1() {//5、牛牛1分
 		try {
 			String key = "HXNN1";
@@ -48,13 +45,12 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
 	}
 	
-	@Scheduled(fixedRate = 3 * 60 * 1000)
+	@Scheduled(cron="20 0/3 * * * ?")
 	public void gethxn3() {
 		try {
 			String key = "HXNN3";
@@ -70,7 +66,7 @@ public class HqTaskManager {
 		}
 	}
 	
-	@Scheduled(fixedRate = 5 * 60 * 1000)
+	@Scheduled(cron="30 0/5 * * * ?")
 	public void gethxn5() {
 		try {
 			String key = "HXNN5";
@@ -86,7 +82,7 @@ public class HqTaskManager {
 		}
 	}
 	
-	@Scheduled(fixedRate = 60 * 1000)
+	@Scheduled(cron="40 0/1 * * * ?")
 	public void gethxd1() {//5、牛牛1分
 		try {
 			String key = "HXBD1";
@@ -96,13 +92,13 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			
+			log.info("HQ-MODE2:{}",item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
 	}
 	
-	@Scheduled(fixedRate = 3 * 60 * 1000)
+	@Scheduled(cron="40 0/3 * * * ?")
 	public void gethbd3() {
 		try {
 			String key = "HXBD3";
@@ -118,7 +114,7 @@ public class HqTaskManager {
 		}
 	}
 	
-	@Scheduled(fixedRate = 5 * 60 * 1000)
+	@Scheduled(cron="40 0/5 * * * ?")
 	public void gethxd5() {
 		try {
 			String key = "HXBD5";
@@ -145,15 +141,15 @@ public class HqTaskManager {
 	private long getDrawIssue(String key) {
 		String currentDate = DateTimeUtils.getCurrentDate("yyMMdd");
 		key = RedisHqKey.DRAW_ISSUE + key + ":" + currentDate;
-		Object obj = redisUtils.get(key);
+		Object obj = redisUtils.incr(key, 1l);
 		String val = "";
 		if(obj == null) {
 			val = currentDate + "0000";
 		}else {
 			val = obj.toString();
 		}
-		long issue = Long.valueOf(val) + 1;
-		redisUtils.set(key, String.valueOf(issue),60 * 60 * 24);
+		long issue = Long.valueOf(val);
+		redisUtils.set(key, String.valueOf(issue + 1),60 * 60 * 24);
 		return issue;
 	}
 	/*

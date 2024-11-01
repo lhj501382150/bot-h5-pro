@@ -395,7 +395,7 @@
 								this.result = JSON.parse(data.data)
 								
 								this.result.data = this.result.CODE.split(',') || []
-								this.leftTime = getSecond(this.result.TIME) + 15
+								this.leftTime = getSecond(this.result.TIME) 
 								this.fillTime()
 								this.getUserBalance()
 								this.loadData()

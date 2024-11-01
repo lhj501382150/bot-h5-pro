@@ -53,6 +53,9 @@ public class BdTaskManager3 {
 			 }
 			 log.info("【Redis-{}信息】:{}",MODE,obj);
 			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 if(draw == null) {
+				 return;
+			 }
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
 			 int step = resp.getIStatus();
 			 int dataId = Integer.parseInt(resp.getDataId());
@@ -62,7 +65,7 @@ public class BdTaskManager3 {
 				 log.info("历史信息当前期数：{}--{}" ,dataId  ,resp.getDataId());
 				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
 					
-				 log.info("【result】:{}",res);
+				 log.info("【result-{}】:{}",MODE,res);
 				 if(res != null && BotConfig.ENABLE) {
 					RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 					String key = getResultKey();
@@ -72,7 +75,7 @@ public class BdTaskManager3 {
 				 return;
 			 }
 			 if(Flow.START_ROB.getStep() == step) {
-				 log.info("【START_ROB】：{}",step);
+				 log.info("【START_ROB-{}】：{}",MODE,step);
 				 if(BotConfig.ENABLE) start();
 				 if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					 JSONObject json = new JSONObject();
@@ -81,6 +84,7 @@ public class BdTaskManager3 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd3.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.CONFIRM_ROB.getStep() == step) {
@@ -95,10 +99,11 @@ public class BdTaskManager3 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd3.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.STOP_ORDER.getStep() == step) {
-				 log.info("【STOP_ORDER】：{}",step);
+				 log.info("【STOP_ORDER-{}】：{}",MODE,step);
 				 stopOrder(draw);
 				 if(WebSocketConfig.ENABLE && SysTaskManager.IS_AUTH) {
 					 WebSocketServerBd3.sendInfo(Flow.STOP_ORDER.getStep(),"");
@@ -107,7 +112,7 @@ public class BdTaskManager3 {
 				 log.info("【OVER-{}】：{}",MODE,step);
 				 overResult(draw);
 			 }else if(Flow.TIPS.getStep() == step) {
-				 log.info("【TIME TIPS】：{}",step);
+				 log.info("【TIME TIPS-{}】：{}",MODE,step);
 			 }
 		} catch (Exception e) {
 			log.error("抢庄异常： " + e.getMessage());
@@ -133,11 +138,9 @@ public class BdTaskManager3 {
 			  if(res != null) {
 				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 				  int dataId = Integer.parseInt(bean.getDataId());
-				  long maxId = draw.getId() + 2;
-				  long minId = draw.getId() - 2;
-				 if(dataId < minId || dataId > maxId) {
-					 log.info("历史信息当前期数：{}--{}" ,dataId ,bean.getDataId());
-					 return;
+				  if(dataId != draw.getId()) {
+					 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
+					 continue;
 				 }
 				 flag = false;
 			  }else {
@@ -165,7 +168,7 @@ public class BdTaskManager3 {
 				}
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					draw.setResult(String.valueOf(bean.getIWinNo()));
-					WebSocketServerBd3.sendInfo(Flow.OVER.getStep(),res.toString());
+//					WebSocketServerBd3.sendInfo(Flow.OVER.getStep(),res.toString());
 				 }
 			    flag = false;
 			}else {

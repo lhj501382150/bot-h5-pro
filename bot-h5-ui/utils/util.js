@@ -100,3 +100,10 @@ export const getIp = () =>{
 	} 
 	return `ws://${ip}/socket/`
 }
+
+export const formatHash = (hash)=>{
+	if(hash.length > 32){
+		return hash.substr(0,10) + '......' + hash.substr(hash.length -10,10)
+	}
+	return hash
+}

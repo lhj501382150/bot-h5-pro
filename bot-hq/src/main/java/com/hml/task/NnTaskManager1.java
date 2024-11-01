@@ -26,7 +26,7 @@ import com.hml.websocket.server.WebSocketServerNn1;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+//@Component
 public class NnTaskManager1 {
 
 	@Autowired
@@ -53,10 +53,14 @@ public class NnTaskManager1 {
 				 return;
 			 }
 			 log.info("【Redis-{}信息】:{}",MODE,obj);
-			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
 			 int step = resp.getIStatus();
 			 int dataId = Integer.parseInt(resp.getDataId());
+			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 if(draw == null || draw.getId() == null) {
+				 return;
+			 }
 			 long maxId = draw.getId() + 2;
 			 long minId = draw.getId() - 2;
 			 if(dataId < minId || dataId > maxId) {
@@ -82,6 +86,7 @@ public class NnTaskManager1 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn1.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.CONFIRM_ROB.getStep() == step) {
@@ -95,10 +100,12 @@ public class NnTaskManager1 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerNn1.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.STOP_ORDER.getStep() == step) {
 				 log.info("【STOP_ORDER】：{}",step);
+				 stopOrder(draw);
 				 if(WebSocketConfig.ENABLE && SysTaskManager.IS_AUTH) {
 					 WebSocketServerNn1.sendInfo(Flow.STOP_ORDER.getStep(),"");
 				 }
@@ -121,6 +128,27 @@ public class NnTaskManager1 {
 	private void start() throws TelegramApiException {
 		baseBot.execute(bossCommand.sendPhoto(BotConfig.CHAT_ID, DrawInfo.MIN_MONEY, null));
 	}
+	private void stopOrder(DataSource draw) throws TelegramApiException {
+//		 查询是否有庄
+		boolean flag = true;
+		int index = 0;
+		while(flag  && index < 5) {
+			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
+			  log.info("【QUERY_ORDER-{}】:{}",MODE,res);
+			  if(res != null) {
+				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
+				  int dataId = Integer.parseInt(bean.getDataId());
+				  if(dataId != draw.getId()) {
+						 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
+						 continue;
+					 }
+				 flag = false;
+			  }else {
+				  index++;
+			  }
+		}
+		  
+	}
 	private void overResult(DataSource draw) throws TelegramApiException, IOException {
 //		 查询是否有庄
 		boolean flag = true;
@@ -139,8 +167,8 @@ public class NnTaskManager1 {
 					sendTable(bean,"开奖成功!("+bean.getIWinNo() + CommandTextParser.getText(bean.getIWinNo()) +")\n本期期数： " + (DrawInfo.DRAW_ISSUE - 1) ,true);
 				}
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
-					draw.setResult(String.valueOf(bean.getIWinNo()));
-					WebSocketServerNn1.sendInfo(Flow.OVER.getStep(),res.toString());
+					draw.setResult(String.valueOf(bean.getSReust()));
+//					WebSocketServerNn1.sendInfo(Flow.OVER.getStep(),res.toString());
 				 }
 			    flag = false;
 			}else {

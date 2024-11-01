@@ -28,17 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class BdTaskManager5 {
 
-	@Autowired
-	private BaseBot baseBot;
 	
 	@Autowired
 	private RedisUtils redisUtils;
 	
-	@Autowired
-	private BossCommand bossCommand;
-	
-	@Autowired
-	private ErrorCommand errorCommand;
 	
 	private String MODE = "4";//bd 1 fencai
 	private String MODE_KEY = "HXBD5";
@@ -51,8 +44,11 @@ public class BdTaskManager5 {
 			 if(StringUtils.isBlank(obj)) {
 				 return;
 			 }
-			 log.info("【Redis信息-{}】:{}",MODE,obj);
+			 log.info("【Redis信息-MODE{}】:{}",MODE,obj);
 			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 if(draw == null) {
+				 return;
+			 }
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
 			 int step = resp.getIStatus();
 			 int dataId = Integer.parseInt(resp.getDataId());
@@ -62,7 +58,7 @@ public class BdTaskManager5 {
 				 log.info("历史信息当前期数：{}--{}" ,dataId ,resp.getDataId());
 				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
 					
-				 log.info("【result】:{}",res);
+				 log.info("【result-MODE4】:{}",res);
 				 if(res != null && BotConfig.ENABLE) {
 					RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 					String key = getResultKey();
@@ -72,8 +68,8 @@ public class BdTaskManager5 {
 				 return;
 			 }
 			 if(Flow.START_ROB.getStep() == step) {
-				 log.info("【START_ROB-{}】：{}",MODE,step);
-				 if(BotConfig.ENABLE) start();
+				 log.info("【START_ROB-MODE{}】：{}",MODE,step);
+				 log.info("draw-MODE4-start:{}",draw);
 				 if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					 JSONObject json = new JSONObject();
 					 json.put("ISSUE", draw.getDrawIssue());
@@ -81,13 +77,13 @@ public class BdTaskManager5 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd5.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.CONFIRM_ROB.getStep() == step) {
 				 log.info("【CONFIRM_ROB】：{}",step);
 			 }else if(Flow.DOWN_ORDER.getStep() == step) {
-				 log.info("【DOWN_ORDER】：{}",step);
-				 if(BotConfig.ENABLE) drawOrder(resp);
+				 log.info("【DOWN_ORDER-MODE4】：{}",step);
 				 if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					 JSONObject json = new JSONObject();
 					 json.put("ISSUE", draw.getDrawIssue());
@@ -95,19 +91,20 @@ public class BdTaskManager5 {
 					 json.put("RESULT", draw.getResult());
 					 json.put("TIME", draw.getSTime());
 					 json.put("ID", draw.getId());
+					 json.put("HASH", draw.getHash());
 					 WebSocketServerBd5.sendInfo(Flow.START_ROB.getStep(),json.toJSONString());
 				 }
 			 }else if(Flow.STOP_ORDER.getStep() == step) {
-				 log.info("【STOP_ORDER】：{}",step);
+				 log.info("【STOP_ORDER-4】：{}",step);
 				 stopOrder(draw);
 				 if(WebSocketConfig.ENABLE && SysTaskManager.IS_AUTH) {
 					 WebSocketServerBd5.sendInfo(Flow.STOP_ORDER.getStep(),"");
 				 }
 			 }else if(Flow.OVER.getStep() == step) {
-				 log.info("【OVER-{}】：{}",MODE,step);
+				 log.info("【OVER-MODE{}】：{}",MODE,step);
 				 overResult(draw);
 			 }else if(Flow.TIPS.getStep() == step) {
-				 log.info("【TIME TIPS】：{}",step);
+				 log.info("【TIME TIPS-MODE4】：{}",step);
 				 if(BotConfig.ENABLE)timeTips();
 			 }
 		} catch (Exception e) {
@@ -119,9 +116,6 @@ public class BdTaskManager5 {
 	private void timeTips() throws TelegramApiException {
 		
 	}
-	private void start() throws TelegramApiException {
-		 
-	}
 
 	private void drawOrder(RespBean res) throws TelegramApiException {
  
@@ -132,15 +126,13 @@ public class BdTaskManager5 {
 		int index = 0;
 		while(flag  && index < 5) {
 			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
-			  log.info("【QUERY_ORDER-{}】:{}",MODE,res);
+			  log.info("【QUERY_ORDER-MODE{}】:{}",MODE,res);
 			  if(res != null) {
 				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 				  int dataId = Integer.parseInt(bean.getDataId());
-				  long maxId = draw.getId() + 2;
-				  long minId = draw.getId() - 2;
-				 if(dataId < minId || dataId > maxId) {
-					 log.info("历史信息当前期数：{}--{}" ,DrawInfo.ID ,bean.getDataId());
-					 return;
+				  if(dataId != draw.getId()) {
+					 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
+					 continue;
 				 }
 				 flag = false;
 			  }else {
@@ -156,16 +148,16 @@ public class BdTaskManager5 {
 		while(flag && index < 5) {
 			Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
 			
-			log.info("【result】:{}",res);
+			log.info("【result-MODE{}】:{}",MODE,res);
 			if(res != null) {
 				RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 				String key = getResultKey();
 				redisUtils.hset(key,bean.getDataId(), res);
 				redisUtils.expire(key, 60 * 60 * 24);
-				log.info("存入结果-{}:{}-{}",MODE,bean.getDataId(),res);
+				log.info("存入结果-MODE{}:{}-{}",MODE,bean.getDataId(),res);
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					draw.setResult(String.valueOf(bean.getIWinNo()));
-					WebSocketServerBd5.sendInfo(Flow.OVER.getStep(),res.toString());
+					log.info("draw-MODE4-result:{}",draw);
 				 }
 			    flag = false;
 			}else {

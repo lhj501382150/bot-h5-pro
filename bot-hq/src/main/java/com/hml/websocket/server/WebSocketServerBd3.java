@@ -63,6 +63,7 @@ public class WebSocketServerBd3 {
 			json.put("RESULT", item.getResult());
 			json.put("TIME", item.getSTime());
 			json.put("ID", item.getId());
+			json.put("HASH", item.getHash());
             sendMessage(getMsg(1,json.toJSONString()));
         } catch (IOException e) {
             log.error("用户:{},网络异常!!!!!!",userId,e);

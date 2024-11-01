@@ -46,7 +46,7 @@ public class NiuTaskManager {
 			 int minId = NiuDrawInfo.ID - 2;
 			 if(dataId < minId || dataId > maxId) {
 				 log.info("历史信息当前期数：{}--{}" ,NiuDrawInfo.ID  ,resp.getDataId());
-				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_N);
+				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + mode);
 					
 				 log.info("【result_his_2】:{}",res);
 				 if(res != null) {
@@ -160,7 +160,6 @@ public class NiuTaskManager {
 				 
 				if(WebSocketConfig.ENABLE  && SysTaskManager.IS_AUTH) {
 					NiuDrawInfo.RESULT = String.valueOf(bean.getSReust());
-//					WebSocketNiuServerApp.sendInfo(Flow.OVER.getStep(),res.toString());
 				 }
 			    flag = false;
 			}else {
