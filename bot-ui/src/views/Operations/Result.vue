@@ -24,12 +24,12 @@
       </el-form-item>
       <el-form-item>
         <el-select v-model="filters.mode" placeholder="类型" clearable>
-          <el-option label="宝斗" value="0"></el-option>
-          <el-option label="牛牛" value="1"></el-option>
+          <el-option v-for="(item,index) in modes" :key="index" :label="item.val" :value="item.key"></el-option>
         </el-select>
       </el-form-item>
 			<el-form-item>
 				<kt-button icon="fa fa-search" :label="$t('action.search')" perms="operations:result:view" type="primary" @click="findPage(null)"/>
+        <kt-button icon="fa fa-search" label="昨天" perms="operations:result:view" type="primary" @click="searchData(4)"/>
         <kt-button icon="fa fa-search" label="今天" perms="operations:result:view" type="primary" @click="searchData(1)"/>
         <kt-button icon="fa fa-search" label="本周" perms="operations:result:view" type="primary" @click="searchData(2)"/>
         <kt-button icon="fa fa-search" label="上周" perms="operations:result:view" type="primary" @click="searchData(3)"/>
@@ -94,7 +94,17 @@ export default {
       exportInfo:{
         id:'record-table',
         name:'用户输赢.xlsx'
-      }
+      },
+      modes:[
+        {key:0,val:'澳洲10宝斗'},
+        {key:1,val:'极速赛车牛牛'},
+        {key:2,val:'哈希1分宝斗'},
+        {key:3,val:'哈希3分宝斗'},
+        {key:4,val:'哈希5分宝斗'},
+        {key:5,val:'哈希1分牛牛'},
+        {key:6,val:'哈希3分牛牛'},
+        {key:7,val:'哈希5分牛牛'},
+      ]
 		}
 	},
 	methods: {
@@ -107,6 +117,8 @@ export default {
         }else if(type==3){
           let date = getWeekStartEndDates(-1)
           this.filters.fdate = [date.startOfWeek + ' 07:00:00:00' ,date.endOfWeek + ' 06:00:00']
+        }else if(type==4){
+          this.filters.fdate = [this.getYesStartDate(),this.getYesEndDate()]
         }
         this.findPage(null)
     },
@@ -162,6 +174,24 @@ export default {
 					return formatDate(time + 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
 				}
 
+    },
+    getYesStartDate(){
+      var time = new Date().getTime();
+      const curTime = getCurTime()
+      if(curTime<'070000'){
+        return formatDate(time - 1000 * 60 * 60 * 24 * 2,2) + ' 07:00:00'
+      }else{
+        return formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 07:00:00'
+      }
+    },
+    getYesEndDate(){
+        var time = new Date().getTime();
+				const curTime = getCurTime()
+				if(curTime<'070000'){
+					return formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
+				}else{
+          return formatDate(time,2) + ' 06:00:00'
+				}
     }
 
 	},

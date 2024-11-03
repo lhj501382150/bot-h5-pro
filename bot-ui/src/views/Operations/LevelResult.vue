@@ -29,6 +29,7 @@
       </el-form-item>
 			<el-form-item>
 				<kt-button icon="fa fa-search" :label="$t('action.search')" perms="operations:levelResult:view" type="primary" @click="findPage(null)"/>
+        <kt-button icon="fa fa-search" label="昨天" perms="operations:result:view" type="primary" @click="searchData(4)"/>
         <kt-button icon="fa fa-search" label="今天" perms="operations:levelResult:view" type="primary" @click="searchData(1)"/>
         <kt-button icon="fa fa-search" label="本周" perms="operations:levelResult:view" type="primary" @click="searchData(2)"/>
         <kt-button icon="fa fa-search" label="上周" perms="operations:levelResult:view" type="primary" @click="searchData(3)"/>
@@ -121,6 +122,8 @@ export default {
         }else if(type==3){
           let date = getWeekStartEndDates(-1)
           this.filters.fdate = [date.startOfWeek + ' 07:00:00:00' ,date.endOfWeek + ' 06:00:00']
+        }else if(type==4){
+          this.filters.fdate = [this.getYesStartDate(),this.getYesEndDate()]
         }
         this.findPage(null)
     },
@@ -174,6 +177,24 @@ export default {
 					return formatDate(time + 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
 				}
 
+    },
+    getYesStartDate(){
+      var time = new Date().getTime();
+      const curTime = getCurTime()
+      if(curTime<'070000'){
+        return formatDate(time - 1000 * 60 * 60 * 24 * 2,2) + ' 07:00:00'
+      }else{
+        return formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 07:00:00'
+      }
+    },
+    getYesEndDate(){
+        var time = new Date().getTime();
+				const curTime = getCurTime()
+				if(curTime<'070000'){
+					return formatDate(time - 1000 * 60 * 60 * 24 * 1,2) + ' 06:00:00'
+				}else{
+          return formatDate(time,2) + ' 06:00:00'
+				}
     }
 
 	},

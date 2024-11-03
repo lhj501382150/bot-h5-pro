@@ -34,8 +34,7 @@
 	</div>
 	<div class='tab-div'>
 		<el-tabs v-model="mode" @tab-click="findPage(null)">
-			<el-tab-pane label="宝斗" name="0"></el-tab-pane>
-			<el-tab-pane label="牛牛" name="1"></el-tab-pane>
+			<el-tab-pane v-for="(item,index) in modes" :key="index" :label="item.val" :name="item.key"></el-tab-pane>
 		</el-tabs>
 	</div>
 	<!--表格内容栏-->
@@ -125,7 +124,17 @@ export default {
         		wareno:''
 			},
       		warenos:[],
-			mode:'0'
+			mode:'0',
+			modes:[
+				{key:'0',val:'澳洲10宝斗'},
+				{key:'1',val:'极速赛车牛牛'},
+				{key:'2',val:'哈希1分宝斗'},
+				{key:'3',val:'哈希3分宝斗'},
+				{key:'4',val:'哈希5分宝斗'},
+				{key:'5',val:'哈希1分牛牛'},
+				{key:'6',val:'哈希3分牛牛'},
+				{key:'7',val:'哈希5分牛牛'},
+			]
 		}
 	},
 	methods: {
