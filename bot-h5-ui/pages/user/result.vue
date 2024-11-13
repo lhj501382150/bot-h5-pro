@@ -18,6 +18,9 @@
 					  		{{item}}
 					  	</view>
 					  </view>
+					   <view class="row" v-if="item.hash">
+						  哈希： <view class="hash-text" @click="goUrl(item.hash)">{{item.hash}}</view>
+					   </view>
 				 </view>
 			</view>
 		</scroll-view>
@@ -52,6 +55,10 @@
 			this.loadData()
 		},
 		methods: {
+			goUrl(hash){
+				let url = uni.getStorageSync('baseUrl') + '/#/trans?value=' +hash
+				window.open(url,'_blank')
+			},
 			scrolltolower() {
 				if (this.records.length >= this.totalCount) return
 				this.loadData()
@@ -133,6 +140,12 @@
 				padding-top: 20upx;
 				padding-bottom: 20upx;
 				border-bottom: 2upx solid #e2e2e2;
+				.hash-text{
+					font-size: 28upx;
+					color: #0055ff;
+					width: 600upx;
+					word-wrap:break-word;
+				}
 				.num-item{
 					width: 59upx;
 					height: 59upx;

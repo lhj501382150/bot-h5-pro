@@ -31,8 +31,8 @@
 				notice:'公告：每天下午2:00-2:15系统自动维护15分钟',
 				noticeno:'',
 				games:[
-					{name:'四方通宝',img:'../../static/images/home/logo.png',path:'./qmbd',mode:0,time:5},
-					{name:'四方牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
+					{name:'澳洲10宝斗',img:'../../static/images/home/logo.png',path:'./qmbd',mode:0,time:5},
+					{name:'极速赛车牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
 					{name:'哈希1分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:2,time:1},
 					{name:'哈希1分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:5,time:1},
 					{name:'哈希3分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:3,time:3},
@@ -48,8 +48,20 @@
 		},
 		onShow() {
 			this.loadNotice()
+			this.getSysPara()
 		},
 		methods: {
+			getSysPara(){
+				let para = {
+					sysid:30
+				}
+				this.$http.post('/Query/SysPara',para,res=>{
+				  if(res.iCode==0){
+					 let data = res.rData.sval
+					 uni.setStorageSync('baseUrl',data)
+				  }
+				})
+			},
 			showDetail(){
 				let no = this.noticeno
 				uni.navigateTo({

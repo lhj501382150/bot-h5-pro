@@ -26,6 +26,7 @@ INSERT INTO `tb_sys_para`(`SYSID`, `SYSTYPE`, `GROUPNAME`, `SYSNAME`, `SVAL`, `M
 INSERT INTO `tb_sys_para`(`SYSID`, `SYSTYPE`, `GROUPNAME`, `SYSNAME`, `SVAL`, `MEMO`, `ISVALID`, `LASTUPTIME`) VALUES (8, '1', '客户端配置', '客服地址', '0768', NULL, 'Y', '2023-12-25 21:19:22');
 INSERT INTO `tb_sys_para`(`SYSID`, `SYSTYPE`, `GROUPNAME`, `SYSNAME`, `SVAL`, `MEMO`, `ISVALID`, `LASTUPTIME`) VALUES (10, '1', '客户端配置', '校验码', '69q6fq69q6dq68q61q69q6aq6cq61q68q68q68', NULL, 'Y', '2023-12-25 21:19:22');
 INSERT INTO `tb_sys_para`(`SYSID`, `SYSTYPE`, `GROUPNAME`, `SYSNAME`, `SVAL`, `MEMO`, `ISVALID`, `LASTUPTIME`) VALUES (11, '1', '客户端配置', '是否暂停运行', 'N', NULL, 'N', '2023-12-25 21:19:22');
+INSERT INTO `tb_sys_para`(`SYSID`, `SYSTYPE`, `GROUPNAME`, `SYSNAME`, `SVAL`, `MEMO`, `ISVALID`, `LASTUPTIME`) VALUES (30, '1', '客户端配置', '行情网站地址', 'http://18.212.105.77:8000/eth', NULL, '', '2023-12-25 21:19:22');
 
 
 

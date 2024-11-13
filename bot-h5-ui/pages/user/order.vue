@@ -3,9 +3,10 @@
 		<uni-nav-bar left-icon="left"  title="投注记录" background-color="rgb(40,148,255)" color="#fff" :border="false" @clickLeft="goBack"></uni-nav-bar>
 		<view class="search-date" v-if="startDate">查询日期：{{startDate}}-{{endDate}}</view>
 		<view class="tab-bar">
-			<view class="tab-item"  :class="item.clevel == mode ? 'active':''" v-for="(item,index) in tabs" :key="index" @click="findData(item)">
+			<!-- <view class="tab-item"  :class="item.clevel == mode ? 'active':''" v-for="(item,index) in tabs" :key="index" @click="findData(item)">
 				{{item.name}}
-			</view>
+			</view> -->
+			{{modeName}}
 		</view>
 		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 95%"
 		        @refresherrefresh="getRefresherrefresh" :refresher-enabled="false" :refresher-triggered="refresherTriggered"

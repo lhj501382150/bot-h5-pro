@@ -489,7 +489,8 @@
 					dataId:this.result.ID,
 					userId:uni.getStorageSync('userno'),
 					userName:uni.getStorageSync("nickname"),
-					orders:orders
+					orders:orders,
+					mode:0
 				}
 				
 				this.$http.post('/Order/Order',para,(res=>{

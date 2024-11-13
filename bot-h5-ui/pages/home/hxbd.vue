@@ -11,6 +11,7 @@
 				<view class="tips">{{result.RESULT}}</view>
 				<view class="tips">{{getStatus(result.RESULT)}}</view>
 			</view>
+			<view class="link-btn" @click="goUrl">{{formatHash(result.HASH)}}</view>
 		</view>
 		<view class="row">
 			<view class="num-item" v-for="(item,index) in result.data" :key="index" :class="'color'+item">
@@ -214,7 +215,7 @@
 </template>
 
 <script>
-	import { getSecond,getCurTime } from '../../utils/util'
+	import { getSecond,getCurTime,formatHash } from '../../utils/util'
 	import {botId, webSocketUrl} from '@/static/config/config.js'
 	import NoticeDialog from '@/components/notice-dialog.vue'
 	import md5 from '@/utils/md5.js'
@@ -224,6 +225,7 @@
 		},
 		data() {
 			return {
+				formatHash:formatHash,
 				user:{},
 				tabIndex:0,
 				link:{
@@ -576,7 +578,8 @@
 				})
 			},
 			goUrl(){
-				window.open(this.link.src,'_blank')
+				let url = uni.getStorageSync('baseUrl') + '/#/trans?value=' +this.result.HASH
+				window.open(url,'_blank')
 			},
 			goBack(){
 				uni.switchTab({
@@ -647,11 +650,10 @@
 			width: 250upx;
 			height: 60upx;
 			line-height: 60upx;
-			background-color: rgb(250,41,41);
-			color: #fff;
+			color: #0000ff;
 			margin-right: 20upx;
 			padding-left: 30upx;
-			padding-right: 30upx;
+			
 			border-radius: 20upx;
 		}
 		.red{

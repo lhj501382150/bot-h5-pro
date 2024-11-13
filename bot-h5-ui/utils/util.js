@@ -102,8 +102,8 @@ export const getIp = () =>{
 }
 
 export const formatHash = (hash)=>{
-	if(hash.length > 32){
-		return hash.substr(0,10) + '......' + hash.substr(hash.length -10,10)
+	if(hash && hash.length > 32){
+		return hash.substr(0,5) + '......' + hash.substr(hash.length -5,5)
 	}
 	return hash
 }

@@ -10,7 +10,7 @@ z<template>
 			<view class="draw-num">
 				<view class="tips">庄：{{result.zj.res}}</view>
 			</view>
-			<view class="link-btn" @click="goUrl">{{link.title}}</view>
+			<view class="link-btn" @click="goUrl">{{formatHash(result.HASH)}}</view>
 		</view>
 		<view class="row">
 			<view class="draw-num" v-for="(item,index) in result.arr" :key="index" v-if="index>0">
@@ -128,7 +128,7 @@ z<template>
 </template>
 
 <script>
-	import { getSecond,getCurTime } from '../../utils/util'
+	import { getSecond,getCurTime,formatHash } from '../../utils/util'
 	import {botId, webSocketUrl} from '@/static/config/config.js'
 	import NoticeDialog from '@/components/notice-dialog.vue'
 	import md5 from '@/utils/md5.js'
@@ -138,6 +138,7 @@ z<template>
 		},
 		data() {
 			return {
+				formatHash:formatHash,
 				user:{},
 				tabIndex:0,
 				link:{
@@ -553,12 +554,13 @@ z<template>
 			},
 			goRecord(){
 				uni.setStorageSync('record_mode',this.mode)
-				uni.switchTab({
-					url:'/pages/record/record'
+				uni.navigateTo({
+					url:'/pages/user/order'
 				})
 			},
 			goUrl(){
-				window.open(this.link.src,'_blank')
+				let url = uni.getStorageSync('baseUrl') + '/#/trans?value=' +this.result.HASH
+				window.open(url,'_blank')
 			},
 			goBack(){
 				uni.switchTab({
@@ -634,8 +636,7 @@ z<template>
 			height: 60upx;
 			line-height: 60upx;
 			text-align: center;
-			background-color: rgb(250,41,41);
-			color: #fff;
+			color: #0000ff;
 			margin-right: 20upx;
 			border-radius: 20upx;
 		}
