@@ -2,7 +2,7 @@
   <div class="container" v-title :data-title="appName">
       <!-- 头部区域 -->
       <head-bar></head-bar>
-      <HeadTitle :msg="msg" :block.sync="item.bk_int" @search="init" :type="1"></HeadTitle>
+      <HeadTitle :msg="msg" :block.sync="item.number" @search="init" :type="1"></HeadTitle>
 
       <el-row class="row">
         <el-col :span="24">
@@ -12,7 +12,7 @@
           </div>
           <div   class="text item">
             <p>区块hash：{{item.hash}}</p>
-            <p>块高度：{{item.bk_int}}</p>
+            <p>块高度：{{item.number}}</p>
             <p>Root Hash：{{item.hash}}</p>
             <p>上一块Hash：{{item.parentHash}}</p>
             <p>成块时间：{{item.timestamp}}</p>
@@ -65,6 +65,7 @@ export default {
     return {
       item:'',
       bk_int:'',
+      hash:'',
       msg:'',
       transactions:[]
     }
@@ -76,11 +77,11 @@ export default {
   },
   methods:{
     findBlock(){
-      let num = this.bk_int
+      let num = this.hash
       let para = {
         "pageIdx": 0,
         "pageSize": 10,
-        number : num
+        "hash" : num
       }
       this.$api.db.block(para).then(res => {
         if(res.iCode == 0){
@@ -112,8 +113,9 @@ export default {
     init(){
       let para = this.$route.query
       this.bk_int = para.value
-      this.msg = '区块高度 ' + parseInt(this.bk_int,16)
-      if(this.bk_int){
+      this.hash = para.hash
+      this.msg = '区块Hash ' + this.hash
+      if(this.hash){
         this.findBlock()
       }
     }

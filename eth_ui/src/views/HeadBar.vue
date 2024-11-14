@@ -2,24 +2,24 @@
     <el-row class="headbar" type="flex" justify="space-between">
       <el-col :span="6" :xs="8">
         <div class="logo" @click="$router.push('/')">
-          <img :src="imgSrc"/>
+          <span>联盟链</span>
           </div>
       </el-col>
       <el-col :span="14" :xs="8">
-        <!-- <el-menu :default-active="activeIndex" class="el-menu-demo hidden-xs-only" mode="horizontal" @select="handleSelect">
+        <el-menu :default-active="activeIndex" class="el-menu-demo hidden-xs-only" mode="horizontal" @select="handleSelect">
           <el-menu-item index="1">首页</el-menu-item>
-          <el-menu-item index="account">账户</el-menu-item>
-          <el-menu-item index="wallet">我的资产</el-menu-item>
+          <!-- <el-menu-item index="account">账户</el-menu-item>
+          <el-menu-item index="wallet">我的资产</el-menu-item> -->
         </el-menu>
 
         <el-menu :default-active="activeIndex" class="el-menu-demo hidden-sm-and-up" mode="horizontal" @select="handleSelect">
           <el-submenu index="1">
             <template slot="title">首页</template>
             <el-menu-item index="1">首页</el-menu-item>
-            <el-menu-item index="account">账户</el-menu-item>
-            <el-menu-item index="wallet">我的资产</el-menu-item>
+            <!-- <el-menu-item index="account">账户</el-menu-item>
+            <el-menu-item index="wallet">我的资产</el-menu-item> -->
           </el-submenu>
-        </el-menu> -->
+        </el-menu>
 
       </el-col>
       <el-col :span="4" :xs="8">

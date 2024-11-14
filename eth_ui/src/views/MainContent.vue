@@ -66,7 +66,7 @@
             <div v-for="(item,index) in blocklist" :key="index" class="block_item">
                 <div class="left">
                   <p class="p1">区块高度：</p>
-                  <p class="p2">{{item.bk_int}}</p>
+                  <p class="p2">{{item.number}}</p>
                   <p class="p3">{{item.seconds}} 秒前</p>
                 </div>
                 <div class="right">
@@ -151,7 +151,7 @@ export default {
     showBlock:function(item){
       this.$router.push({
         path:'/block',
-        query:{value:item.number}
+        query:{value:item.number,hash:item.hash}
       })
     },
     refresh: function(){

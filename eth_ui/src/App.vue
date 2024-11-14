@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-title data-title="会盟链">
+  <div id="app" v-title data-title="联盟链">
     <router-view/>
   </div>
 </template>

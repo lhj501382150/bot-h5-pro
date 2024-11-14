@@ -59,7 +59,7 @@ export default {
       this.time = getCurrentTime()
     },
     goback(){
-      this.$router.go(-1)
+      this.$router.push('/')
     },
     search(){
       if(this.para){

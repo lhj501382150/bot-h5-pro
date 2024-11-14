@@ -1,6 +1,6 @@
 export default {
     state: {
-        appName: "会盟链",  // 应用名称
+        appName: "联盟链",  // 应用名称
         themeColor: "#1A283E",  // 主题颜色#
         oldThemeColor: "#1A283E",   // 上一次主题颜色
         collapse:false,  // 导航栏收缩状态
