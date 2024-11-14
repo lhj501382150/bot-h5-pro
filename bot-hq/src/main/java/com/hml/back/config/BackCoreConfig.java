@@ -22,6 +22,7 @@ public class BackCoreConfig {
 	public static String ORDER = "/Order/Order";
 	public static String QUERY_ORDRE = "/Order/OrderQuery";
 	public static String ADD_ACCOUNT = "/Account/AddAccount";
+	public static String ADD_HQ = "/BlockChain/AddData";
 
 
 	@Value("${backcore.sendUrl}")

@@ -45,6 +45,8 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
+			
+			backCoreService.addHqData(item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -61,6 +63,7 @@ public class HqTaskManager {
 			backCoreService.addData(req);
 			dataMap.put(key, item);
 			
+			backCoreService.addHqData(item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -77,6 +80,7 @@ public class HqTaskManager {
 			backCoreService.addData(req);
 			dataMap.put(key, item);
 			
+			backCoreService.addHqData(item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -92,6 +96,7 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
+			backCoreService.addHqData(item);
 			log.info("HQ-MODE2:{}",item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
@@ -108,7 +113,7 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			
+			backCoreService.addHqData(item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -124,7 +129,7 @@ public class HqTaskManager {
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			
+			backCoreService.addHqData(item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}

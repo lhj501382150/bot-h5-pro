@@ -56,7 +56,7 @@
 		},
 		methods: {
 			goUrl(hash){
-				let url = uni.getStorageSync('baseUrl') + '/#/trans?value=' +hash
+				let url = uni.getStorageSync('baseUrl') + '/#/hash?value=0x' +hash
 				window.open(url,'_blank')
 			},
 			scrolltolower() {

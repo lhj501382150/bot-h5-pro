@@ -138,7 +138,7 @@ public class BdTaskManager3 {
 			  if(res != null) {
 				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 				  int dataId = Integer.parseInt(bean.getDataId());
-				  if(dataId != draw.getId()) {
+				  if(dataId < draw.getId() - 2) {
 					 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
 					 continue;
 				 }

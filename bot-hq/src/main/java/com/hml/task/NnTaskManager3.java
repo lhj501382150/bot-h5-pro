@@ -131,8 +131,8 @@ public class NnTaskManager3 {
 			  if(res != null) {
 				  RespBean bean = JSONObject.parseObject(res.toString(), RespBean.class);
 				  int dataId = Integer.parseInt(bean.getDataId());
-				  if(dataId != draw.getId()) {
-						 log.info("历史信息当前期数-MODE3：{}--{}" ,draw.getId() ,bean.getDataId());
+				  if(dataId < draw.getId() - 2) {
+						 log.info("历史信息当前期数-MODE6：{}--{}" ,draw.getId() ,bean.getDataId());
 						 continue;
 					 }
 				 flag = false;

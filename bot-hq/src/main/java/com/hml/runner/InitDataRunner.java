@@ -26,6 +26,12 @@ public class InitDataRunner implements ApplicationRunner {
 	
 		redisUtils.del(RedisKey.ORDER_QUERY,RedisKey.CURRENT_STATUS);
 		redis2Utils.del(RedisKey.ORDER_QUERY,RedisKey.CURRENT_STATUS);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 2);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 3);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 4);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 5);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 6);
+		redisUtils.del(RedisKey.ORDER_QUERY_MODE + 7);
 		sysTaskManager.checkSysAuth();
 	}
 

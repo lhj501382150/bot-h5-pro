@@ -8,7 +8,7 @@ public class RandomStringGenerator {
     private static final String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String CHAR_UPPER = CHAR_LOWER.toUpperCase();
     private static final String NUMBER = "0123456789"; // 以保证1-9之间数字至少出现一次
-    private static final String ALL_CHAR = CHAR_LOWER + CHAR_UPPER + NUMBER;
+    private static final String ALL_CHAR = CHAR_LOWER + NUMBER;
     private static final SecureRandom random = new SecureRandom();
 
     public static String replaceNum(String str,String nums) {

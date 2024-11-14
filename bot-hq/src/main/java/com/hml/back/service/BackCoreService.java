@@ -14,6 +14,7 @@ import com.hml.back.bean.RespBean;
 import com.hml.back.bean.RespMoney;
 import com.hml.back.config.BackCoreConfig;
 import com.hml.bean.CommandTextParser;
+import com.hml.bean.DataSource;
 import com.hml.bot.BaseBot;
 import com.hml.command.BaseBtn;
 import com.hml.redis.RedisKey;
@@ -249,6 +250,23 @@ public class BackCoreService extends BaseBtn{
 		String result = "ok";
 		try {
 			String ret = HttpClientUtils.doPost(BackCoreConfig.ADD_DATA, data.toJSONString(),null);
+			JSONObject json = JSONObject.parseObject(ret);
+			if(!"0".equals(json.getString("iCode"))){
+				throw new Exception(json.getString("sMsg"));
+			}
+		} catch (Exception e) {
+			result = e.getMessage();
+		}
+		return result;
+	}
+	
+	public String addHqData(DataSource data){
+		String result = "ok";
+		try {
+			JSONObject req = new JSONObject();
+			req.put("sysTime", data.getSTime());
+			req.put("hashData", "0x" + data.getHash());
+			String ret = HttpClientUtils.doPost(BackCoreConfig.ADD_HQ, req.toJSONString(),null);
 			JSONObject json = JSONObject.parseObject(ret);
 			if(!"0".equals(json.getString("iCode"))){
 				throw new Exception(json.getString("sMsg"));
