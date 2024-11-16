@@ -11,10 +11,12 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hml.bean.DataSource;
+import com.hml.redis.RedisUtils;
 import com.hml.task.HqTaskManager;
 import com.hml.utils.PasswordEncoder;
 
@@ -25,6 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @ServerEndpoint("/socket/bd1/{userno}/{md5}")
 @Component
 public class WebSocketServerBd1 {
+	
+	@Autowired
+	private RedisUtils redisUtils;
+	
     /**静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。*/
     private static int onlineCount = 0;
 
@@ -35,6 +41,7 @@ public class WebSocketServerBd1 {
     private String userId="";
     public static Session temp;
     public static boolean flag=false;
+    
     /**
      * 连接建立成功调用的方法*/
     @OnOpen
@@ -56,7 +63,7 @@ public class WebSocketServerBd1 {
         log.info("用户{}连接,当前在线人数为:{}" ,userId, getOnlineCount());
 
         try {
-        	DataSource item = HqTaskManager.getDraw("HXBD1");
+        	DataSource item = HqTaskManager.getDraw("HXBD1",redisUtils);
         	if(item == null) {
         		item =new DataSource();
         	}

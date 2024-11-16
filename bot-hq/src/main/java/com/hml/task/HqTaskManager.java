@@ -15,6 +15,7 @@ import com.hml.redis.RedisHqKey;
 import com.hml.redis.RedisUtils;
 import com.hml.utils.DateTimeUtils;
 import com.hml.utils.RandomStringGenerator;
+import com.hml.utils.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +31,16 @@ public class HqTaskManager {
 	
 	private static Map<String,DataSource> dataMap = new HashMap<String, DataSource>();
 	
+	public static DataSource getDraw(String type,RedisUtils redisUtils) {
+		 DataSource item = dataMap.get(type);
+		 if(item == null && redisUtils != null) {
+			 Object obj = redisUtils.get(RedisHqKey.MODE_HQ_RESULT + type);
+			 if(!StringUtils.isBlank(obj)) {
+				 item = JSONObject.parseObject(obj.toString(), DataSource.class);
+			 }
+		 }
+		 return item;
+	}
 	public static DataSource getDraw(String type) {
 		 DataSource item = dataMap.get(type);
 		 return item;
@@ -75,7 +86,7 @@ public class HqTaskManager {
 			String key = "HXNN5";
 			dataMap.remove(key);
 			
-			DataSource item = getDataSource("7", key, 7);
+			DataSource item = getDataSource("7", key, 5);
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
@@ -125,7 +136,7 @@ public class HqTaskManager {
 			String key = "HXBD5";
 			dataMap.remove(key);
 			
-			DataSource item = getDataSource("4", key, 7);
+			DataSource item = getDataSource("4", key, 5);
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
@@ -192,6 +203,12 @@ public class HqTaskManager {
 //		item.setCode(result);
 		item.setNextTime(DateTimeUtils.addMinute(minutes));
 		item.setSTime(DateTimeUtils.getDateTime());
+		
+		try {
+			redisUtils.set(RedisHqKey.MODE_HQ_RESULT + key, JSONObject.toJSONString(item));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return item;
 	}
 }

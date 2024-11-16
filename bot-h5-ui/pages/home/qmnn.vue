@@ -534,8 +534,8 @@ z<template>
 			},
 			goRecord(){
 				uni.setStorageSync('record_mode',1)
-				uni.switchTab({
-					url:'/pages/record/record'
+				uni.navigateTo({
+					url:'/pages/user/order'
 				})
 			},
 			goUrl(){

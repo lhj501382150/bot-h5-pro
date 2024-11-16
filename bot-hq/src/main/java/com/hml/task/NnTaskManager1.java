@@ -57,8 +57,10 @@ public class NnTaskManager1 {
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
 			 int step = resp.getIStatus();
 			 int dataId = Integer.parseInt(resp.getDataId());
-			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 DataSource draw = HqTaskManager.getDraw(MODE_KEY,redisUtils);
 			 if(draw == null || draw.getId() == null) {
+				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
+				 log.info("【result-MODE{}】:{}",MODE,res);
 				 return;
 			 }
 			 long maxId = draw.getId() + 2;

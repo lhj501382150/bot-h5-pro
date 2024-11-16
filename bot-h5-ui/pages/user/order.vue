@@ -285,6 +285,12 @@
 		width: 670upx;
 		padding-left: 40upx;
 		padding-right: 40upx;
+		padding-top: 20upx;
+		padding-bottom: 20upx;
+		background-color: #fff;
+		font-display: 30upx;
+		font-weight: 600;
+		letter-spacing: 2upx;
 		.tab-item{
 			width:150upx;
 			height:80upx;

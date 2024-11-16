@@ -8,4 +8,5 @@ public class RedisHqKey {
 	
 	public static String DRAW_RESULT = "DRAW_RESULT:";
 	
+	public static String MODE_HQ_RESULT = "MODE_HQ_RESULT:";
 }

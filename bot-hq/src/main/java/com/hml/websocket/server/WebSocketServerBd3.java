@@ -11,10 +11,12 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hml.bean.DataSource;
+import com.hml.redis.RedisUtils;
 import com.hml.task.HqTaskManager;
 import com.hml.utils.PasswordEncoder;
 
@@ -25,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @ServerEndpoint("/socket/bd3/{userno}/{md5}")
 @Component
 public class WebSocketServerBd3 {
+	@Autowired
+	private RedisUtils redisUtils;
     /**静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。*/
     private static int onlineCount = 0;
 
@@ -56,7 +60,7 @@ public class WebSocketServerBd3 {
         log.info("用户{}连接,当前在线人数为:{}" ,userId, getOnlineCount());
 
         try {
-        	DataSource item = HqTaskManager.getDraw("HXBD3");
+        	DataSource item = HqTaskManager.getDraw("HXBD3",redisUtils);
         	if(item == null) {
         		item =new DataSource();
         	}

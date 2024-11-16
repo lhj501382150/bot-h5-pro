@@ -71,6 +71,8 @@
 			showGame(item){
 				uni.setStorageSync('xz_mode',item.mode)
 				uni.setStorageSync('xz_name',item.name)
+				uni.setStorageSync('record_mode',item.mode)
+				uni.setStorageSync('record_name',item.name)
 				uni.setStorageSync('xz_time',item.time)
 				uni.navigateTo({
 					url:item.path

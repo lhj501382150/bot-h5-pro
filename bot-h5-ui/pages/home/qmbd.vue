@@ -554,7 +554,7 @@
 			goRecord(){
 				uni.setStorageSync('record_mode',0)
 				uni.navigateTo({
-					url:'/pages/record/record'
+					url:'/pages/user/order'
 				})
 			},
 			goUrl(){

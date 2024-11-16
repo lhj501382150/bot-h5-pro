@@ -1,3 +1,5 @@
 /bot-ui/node_modules
 /bot-ui/dist
 /eth_ui/node_modules
+/eth_ui/dist
+/bot-h5-ui/unpackage

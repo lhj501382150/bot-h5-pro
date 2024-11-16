@@ -49,8 +49,10 @@ public class NnTaskManager3 {
 				 return;
 			 }
 			 log.info("【Redis信息-{}】:{}",MODE,obj);
-			 DataSource draw = HqTaskManager.getDraw(MODE_KEY);
+			 DataSource draw = HqTaskManager.getDraw(MODE_KEY,redisUtils);
 			 if(draw == null) {
+				 Object res = redisUtils.lGetAndPop(RedisKey.ORDER_QUERY_MODE + MODE);
+				 log.info("【result-MODE{}】:{}",MODE,res);
 				 return;
 			 }
 			 RespBean resp = JSONObject.parseObject(obj.toString(), RespBean.class);
