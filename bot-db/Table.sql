@@ -145,6 +145,7 @@ CREATE TABLE tb_data_pre_code (
   DRAW_ISSUE varchar(32)  DEFAULT '' COMMENT '期数',
   CODE  varchar(32) DEFAULT '' COMMENT '结果',
   MEMO varchar(128) DEFAULT '' COMMENT '',
+  DRAW_TIME varchar(32) DEFAULT '' COMMENT '',
   CREATE_USER varchar(32) DEFAULT '' COMMENT '',
   UPDATE_USER varchar(32) DEFAULT '' COMMENT '',
   CREATE_TIME timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',

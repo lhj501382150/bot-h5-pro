@@ -14,6 +14,7 @@ import com.hml.core.page.MybatisPlusPageHelper;
 import com.hml.core.page.PageRequest;
 import com.hml.core.page.PageResult;
 import com.hml.mall.entity.bot.PreCode;
+import com.hml.mall.entity.order.Order;
 import com.hml.mall.iface.bot.IPreCodeService;
 import com.hml.mall.mapper.bot.PreCodeMapper;
 import com.hml.redis.RedisKey;
@@ -54,7 +55,7 @@ public class PreCodeServiceImpl extends ServiceImpl<PreCodeMapper, PreCode> impl
     @Transactional(rollbackFor = Exception.class)
 	public boolean save(PreCode entity) {
     	String mode = entity.getRkey();
-    	String issue = getDrawIssue(mode);
+    	String issue = entity.getDrawIssue();
     	QueryWrapper<PreCode> qw = new QueryWrapper<PreCode>();
     	qw.eq("MODE", mode);
     	qw.eq("DRAW_ISSUE", issue);
@@ -106,7 +107,7 @@ public class PreCodeServiceImpl extends ServiceImpl<PreCodeMapper, PreCode> impl
 		}else {
 			val = obj.toString();
 		}
-		long issue = Long.valueOf(val) + 1;
+		long issue = Long.valueOf(val);
 		return String.valueOf(issue);
 	}
 	
@@ -125,5 +126,11 @@ public class PreCodeServiceImpl extends ServiceImpl<PreCodeMapper, PreCode> impl
 		map.put("HXNN5", 7);
 		
 		return map.get(key);
+	}
+	
+	@Override
+	public List<Order> findDraw(String model,String contnum) {
+		 
+		return preCodeMapper.findDraw(model, contnum);
 	}
 }

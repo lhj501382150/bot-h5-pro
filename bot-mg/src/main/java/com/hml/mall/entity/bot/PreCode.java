@@ -46,6 +46,9 @@ private static final long serialVersionUID=1L;
     */
     @TableField("DRAW_ISSUE")
     private String drawIssue;
+    
+    @TableField("DRAW_TIME")
+    private String drawTime;
 
     /**
     * 结果

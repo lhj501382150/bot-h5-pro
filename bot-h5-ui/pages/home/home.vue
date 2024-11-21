@@ -33,6 +33,7 @@
 				games:[
 					{name:'澳洲10宝斗',img:'../../static/images/home/logo.png',path:'./qmbd',mode:0,time:5},
 					{name:'极速赛车牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
+					{name:'澳洲10牛牛',img:'../../static/images/home/logo.png',path:'./hxnn',mode:8,time:5,url:'niu10'},
 					{name:'哈希1分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:2,time:1},
 					{name:'哈希1分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:5,time:1},
 					{name:'哈希3分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:3,time:3},
@@ -74,6 +75,7 @@
 				uni.setStorageSync('record_mode',item.mode)
 				uni.setStorageSync('record_name',item.name)
 				uni.setStorageSync('xz_time',item.time)
+				uni.setStorageSync("socketUrl",item.url)
 				uni.navigateTo({
 					url:item.path
 				})
@@ -132,7 +134,7 @@
 	.games{
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-around;
+		justify-content: flex-start;
 		width: 100%;
 		.game-item{
 			width: 40%;
@@ -142,6 +144,7 @@
 			align-items: center;
 			border: 1px solid #e2e2e2;
 			margin-bottom: 20upx;
+			margin-left: 50upx;
 			.title{
 				width: 100%;
 				line-height: 80upx;

@@ -18,6 +18,8 @@ public class DrawInfo {
 	
 	public static String RESULT = "";
 	
+	public static String RESULT_NIU = "";
+	
 	public static Flow FLOW;
 	
 	public static String MIN_MONEY = "10000";

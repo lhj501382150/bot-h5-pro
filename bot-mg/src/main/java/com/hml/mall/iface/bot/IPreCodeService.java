@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hml.core.page.PageRequest;
 import com.hml.core.page.PageResult;
 import com.hml.mall.entity.bot.PreCode;
+import com.hml.mall.entity.order.Order;
 
 /**
 * <p>
@@ -36,5 +37,9 @@ public interface IPreCodeService extends IService<PreCode> {
     * @return
     */
    PageResult findPage(PageRequest pageRequest);
+   /*
+    * 查询下注结果
+    */
+   List<Order> findDraw(String model,String contnum);
 
 }

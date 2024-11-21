@@ -10,7 +10,8 @@ z<template>
 			<view class="draw-num">
 				<view class="tips">庄：{{result.zj.res}}</view>
 			</view>
-			<view class="link-btn" @click="goUrl">{{formatHash(result.HASH)}}</view>
+			<view class="link-btn" @click="goUrl" v-if="mode==8">{{link.title}}</view>
+			<view class="link-text" @click="goUrl" v-else>{{formatHash(result.HASH)}}</view>
 		</view>
 		<view class="row">
 			<view class="draw-num" v-for="(item,index) in result.arr" :key="index" v-if="index>0">
@@ -142,8 +143,8 @@ z<template>
 				user:{},
 				tabIndex:0,
 				link:{
-					title:'138极速赛车',
-					src:'https://m.228168d.com/html/jisusaiche/index.html'
+					title:'澳洲10在线直播',
+					src:'https://m.228168d.com/html/aozxy10/index.html'
 				},
 				result:{
 					arr:[],
@@ -215,13 +216,18 @@ z<template>
 				nums:[10,20,50,100,200,500,1000,2000,5000,10000],
 				mode:'',
 				modeName:'',
-				modeTime:1
+				modeTime:1,
+				socketUrl:''
 			}
 		},
 		onLoad() {
 			this.modeName = uni.getStorageSync('xz_name')
 			this.mode = uni.getStorageSync('xz_mode')
 			this.modeTime = uni.getStorageSync('xz_time')
+			this.socketUrl = uni.getStorageSync("socketUrl")
+			if(!this.socketUrl){
+				this.socketUrl = 'niu' + this.modeTime
+			}
 			this.getUserBalance()
 			this.loadData()
 			this.getShowNoticePara()
@@ -306,7 +312,7 @@ z<template>
 					})
 				}
 				let pwd = md5(userno+userno)
-				let url = webSocketUrl + 'niu'+this.modeTime+'/' + userno+"/" + pwd;
+				let url = webSocketUrl + this.socketUrl+'/' + userno+"/" + pwd;
 				this.socketTask = uni.connectSocket({
 					url: url ,
 					success(data) {
@@ -559,7 +565,12 @@ z<template>
 				})
 			},
 			goUrl(){
-				let url = uni.getStorageSync('baseUrl') + '/#/block?hash=0x' +this.result.HASH
+				let url = ''
+				if(this.mode==8){
+					url = this.link.src
+				}else{
+					url = uni.getStorageSync('baseUrl') + '/#/block?hash=0x' +this.result.HASH
+				}
 				window.open(url,'_blank')
 			},
 			goBack(){
@@ -632,6 +643,17 @@ z<template>
 			}
 		}
 		.link-btn{
+			width: 250upx;
+			height: 60upx;
+			line-height: 60upx;
+			background-color: rgb(250,41,41);
+			color: #fff;
+			margin-right: 20upx;
+			padding-left: 30upx;
+			padding-right: 30upx;
+			border-radius: 20upx;
+		}
+		.link-text{
 			width: 250upx;
 			height: 60upx;
 			line-height: 60upx;

@@ -42,6 +42,7 @@ public class GetDataThread extends Thread {
 					  DrawInfo.DRAW_TIME = data.getString("drawTime");
 					  DrawInfo.DRAW_COUNT = data.getInteger("drawCount");
 					  DrawInfo.DRAW_ISSUE = data.getInteger("drawIssue");
+					   
 					  if(isFirst) {
 						  boolean flag = true;
 						  try {
@@ -59,6 +60,9 @@ public class GetDataThread extends Thread {
 							  req.put("sTime", DrawInfo.PRE_DRAW_TIME);
 							  req.put("sResult", DrawInfo.PRE_DRAW_CODE);
 							  req.put("mode", "0");
+							  backCoreService.addData(req);
+							  
+							  req.put("mode", "8");
 							  backCoreService.addData(req);
 						  }
 						  

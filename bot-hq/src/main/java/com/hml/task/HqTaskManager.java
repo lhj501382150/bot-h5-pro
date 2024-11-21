@@ -46,56 +46,56 @@ public class HqTaskManager {
 		 return item;
 	}
 	//模式编号  0、普通 1、牛牛  2、普通1分 3、普通3分 4、普通5分  5、牛牛1分   6、牛牛3分  7、牛牛5分
-	@Scheduled(cron="10 0/1 * * * ?")
-	public void gethxn1() {//5、牛牛1分
-		try {
-			String key = "HXNN1";
-			dataMap.remove(key);
-			
-			DataSource item = getDataSource("5", key, 1);
-			JSONObject req = (JSONObject)JSONObject.toJSON(item);
-			backCoreService.addData(req);
-			dataMap.put(key, item);
-			
-			backCoreService.addHqData(item);
-		} catch (Exception e) {
-			log.error("生成行情数据异常：",e);
-		}
-	}
+//	@Scheduled(cron="10 0/1 * * * ?")
+//	public void gethxn1() {//5、牛牛1分
+//		try {
+//			String key = "HXNN1";
+//			dataMap.remove(key);
+//			
+//			DataSource item = getDataSource("5", key, 1);
+//			JSONObject req = (JSONObject)JSONObject.toJSON(item);
+//			backCoreService.addData(req);
+//			dataMap.put(key, item);
+//			
+//			backCoreService.addHqData(item);
+//		} catch (Exception e) {
+//			log.error("生成行情数据异常：",e);
+//		}
+//	}
 	
-	@Scheduled(cron="20 0/3 * * * ?")
-	public void gethxn3() {
-		try {
-			String key = "HXNN3";
-			dataMap.remove(key);
-			
-			DataSource item = getDataSource("6", key, 3);
-			JSONObject req = (JSONObject)JSONObject.toJSON(item);
-			backCoreService.addData(req);
-			dataMap.put(key, item);
-			
-			backCoreService.addHqData(item);
-		} catch (Exception e) {
-			log.error("生成行情数据异常：",e);
-		}
-	}
+//	@Scheduled(cron="20 0/3 * * * ?")
+//	public void gethxn3() {
+//		try {
+//			String key = "HXNN3";
+//			dataMap.remove(key);
+//			
+//			DataSource item = getDataSource("6", key, 3);
+//			JSONObject req = (JSONObject)JSONObject.toJSON(item);
+//			backCoreService.addData(req);
+//			dataMap.put(key, item);
+//			
+//			backCoreService.addHqData(item);
+//		} catch (Exception e) {
+//			log.error("生成行情数据异常：",e);
+//		}
+//	}
 	
-	@Scheduled(cron="30 0/5 * * * ?")
-	public void gethxn5() {
-		try {
-			String key = "HXNN5";
-			dataMap.remove(key);
-			
-			DataSource item = getDataSource("7", key, 5);
-			JSONObject req = (JSONObject)JSONObject.toJSON(item);
-			backCoreService.addData(req);
-			dataMap.put(key, item);
-			
-			backCoreService.addHqData(item);
-		} catch (Exception e) {
-			log.error("生成行情数据异常：",e);
-		}
-	}
+//	@Scheduled(cron="30 0/5 * * * ?")
+//	public void gethxn5() {
+//		try {
+//			String key = "HXNN5";
+//			dataMap.remove(key);
+//			
+//			DataSource item = getDataSource("7", key, 5);
+//			JSONObject req = (JSONObject)JSONObject.toJSON(item);
+//			backCoreService.addData(req);
+//			dataMap.put(key, item);
+//			
+//			backCoreService.addHqData(item);
+//		} catch (Exception e) {
+//			log.error("生成行情数据异常：",e);
+//		}
+//	}
 	
 	@Scheduled(cron="40 0/1 * * * ?")
 	public void gethxd1() {//5、牛牛1分
@@ -104,10 +104,18 @@ public class HqTaskManager {
 			dataMap.remove(key);
 			
 			DataSource item = getDataSource("2", key, 1);
+			backCoreService.addHqData(item);
+			
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			backCoreService.addHqData(item);
+			
+			key = "HXNN1";
+			dataMap.remove(key);
+			item = copyDataSource(item,"5", key, 1);
+			req = (JSONObject)JSONObject.toJSON(item);
+			backCoreService.addData(req);
+			dataMap.put(key, item);
 			log.info("HQ-MODE2:{}",item);
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
@@ -121,10 +129,20 @@ public class HqTaskManager {
 			dataMap.remove(key);
 			
 			DataSource item = getDataSource("3", key, 3);
+			backCoreService.addHqData(item);
+			
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			backCoreService.addHqData(item);
+			
+			key = "HXNN3";
+			dataMap.remove(key);
+			
+			item = copyDataSource(item,"6", key, 3);
+			req = (JSONObject)JSONObject.toJSON(item);
+			backCoreService.addData(req);
+			dataMap.put(key, item);
+			
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -137,10 +155,20 @@ public class HqTaskManager {
 			dataMap.remove(key);
 			
 			DataSource item = getDataSource("4", key, 5);
+			backCoreService.addHqData(item);
+			
 			JSONObject req = (JSONObject)JSONObject.toJSON(item);
 			backCoreService.addData(req);
 			dataMap.put(key, item);
-			backCoreService.addHqData(item);
+			
+			key = "HXNN5";
+			dataMap.remove(key);
+			
+			item = copyDataSource(item,"7", key, 5);
+			req = (JSONObject)JSONObject.toJSON(item);
+			backCoreService.addData(req);
+			dataMap.put(key, item);
+			
 		} catch (Exception e) {
 			log.error("生成行情数据异常：",e);
 		}
@@ -203,6 +231,27 @@ public class HqTaskManager {
 //		item.setCode(result);
 		item.setNextTime(DateTimeUtils.addMinute(minutes));
 		item.setSTime(DateTimeUtils.getDateTime());
+		
+		try {
+			redisUtils.set(RedisHqKey.MODE_HQ_RESULT + key, JSONObject.toJSONString(item));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+	
+	private DataSource copyDataSource(DataSource source,String mode,String key,int minutes) throws Exception {
+		DataSource item = new DataSource();
+		item.setId(source.getId());
+		item.setBotId(BotConfig.CHAT_ID);
+		item.setMode(mode);
+		item.setDrawIssue(source.getDrawIssue());
+		
+		 
+		item.setHash(source.getHash());
+		item.setSResult(source.getSResult());
+		item.setNextTime(source.getNextTime());
+		item.setSTime(source.getSTime());
 		
 		try {
 			redisUtils.set(RedisHqKey.MODE_HQ_RESULT + key, JSONObject.toJSONString(item));

@@ -44,3 +44,12 @@ export const findList = (data) => {
     data
   })
 }
+
+
+export const getDraw = (data) => {
+  return axios({
+    url: '/preCode/getDraw',
+    method: 'post',
+    data
+  })
+}

@@ -127,6 +127,7 @@ export default {
 			mode:'0',
 			modes:[
 				{key:'0',val:'澳洲10宝斗'},
+				{key:'8',val:'澳洲10牛牛'},
 				{key:'1',val:'极速赛车牛牛'},
 				{key:'2',val:'哈希1分宝斗'},
 				{key:'3',val:'哈希3分宝斗'},

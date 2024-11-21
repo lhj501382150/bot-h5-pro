@@ -120,6 +120,7 @@
 				],
 				modes:[
 					{value:0,text:'澳洲10宝斗'},
+					{value:8,text:'澳洲10牛牛'},
 					{value:1,text:'极速赛车牛牛'},
 					{value:2,text:'哈希1分宝斗'},
 					{value:3,text:'哈希3分宝斗'},

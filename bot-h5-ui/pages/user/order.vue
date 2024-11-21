@@ -2,10 +2,16 @@
 	<view class="order">
 		<uni-nav-bar left-icon="left"  title="投注记录" background-color="rgb(40,148,255)" color="#fff" :border="false" @clickLeft="goBack"></uni-nav-bar>
 		<view class="search-date" v-if="startDate">查询日期：{{startDate}}-{{endDate}}</view>
-		<view class="tab-bar">
+		<view class="tab-bar" v-if="startDate">
 			<!-- <view class="tab-item"  :class="item.clevel == mode ? 'active':''" v-for="(item,index) in tabs" :key="index" @click="findData(item)">
 				{{item.name}}
 			</view> -->
+			<view class="select-box">
+				<uni-data-select v-model="mode" placeholder="类型选择" :localdata="modes" ></uni-data-select>
+			</view>
+			<button type="primary" class="query-btn" size="mini" @click="findData" :loading="isLoading" :disabled="isLoading">查询</button>
+		</view>
+		<view v-else class="tab-bar">
 			{{modeName}}
 		</view>
 		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 95%"
@@ -138,12 +144,20 @@
 				startDate:'',
 				endDate:'',
 				mode:0,
-				tabs:[
-					{clevel:0,name:'宝斗'},
-					{clevel:1,name:'牛牛'}
+				modes:[
+					{value:0,text:'澳洲10宝斗'},
+					{value:8,text:'澳洲10牛牛'},
+					{value:1,text:'极速赛车牛牛'},
+					{value:2,text:'哈希1分宝斗'},
+					{value:3,text:'哈希3分宝斗'},
+					{value:4,text:'哈希5分宝斗'},
+					{value:5,text:'哈希1分牛牛'},
+					{value:6,text:'哈希3分牛牛'},
+					{value:7,text:'哈希5分牛牛'}
 				],
 				modeName:'',
 				modeType:0,// 0 宝斗 1 牛牛
+				isLoading:false
 			}
 		},
 		onLoad(option) {
@@ -176,13 +190,20 @@
 				}
 				return modeType
 			},
-			findData(item){
-				this.mode = item.clevel
-				this.search.pageIdx = 0
-				this.totalPage = 1
-				this.totalCount = 0
-				this.records = []
-				this.loadData()
+			findData(){
+				if(this.mode !== '' && this.mode >= 0){
+					this.search.pageIdx = 0
+					this.totalPage = 1
+					this.totalCount = 0
+					this.records = []
+					this.loadData()
+				}else{
+					uni.showToast({
+						title:'请选择类型',
+						icon:'error',
+						duration:3000
+					})
+				}
 			},
 			scrolltolower() {
 				if (this.records.length >= this.totalCount) return
@@ -212,8 +233,9 @@
 				}
 				this.search.userno = this.userno
 				this.search.mode = this.mode
-				
+				this.isLoading = true
 				this.$http.post(url,this.search,res => {
+					this.isLoading = false
 					let datas = res.rData || []
 					datas.forEach(item=>{
 						if(item.bnno){
@@ -291,6 +313,10 @@
 		font-display: 30upx;
 		font-weight: 600;
 		letter-spacing: 2upx;
+		.select-box{
+			padding-left:20upx;
+			width: 60%;
+		}
 		.tab-item{
 			width:150upx;
 			height:80upx;

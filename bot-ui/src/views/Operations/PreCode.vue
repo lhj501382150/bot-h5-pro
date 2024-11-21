@@ -23,22 +23,41 @@
 		</el-form>
 	</div>
 	<!--表格内容栏-->
-	<kt-table permsEdit="operations:preCode:edit" permsDelete="operations:preCode:del"
+	<kt-table  permsDelete="operations:preCode:del"
 		:data="pageResult" :columns="filterColumns"
 		@findPage="findPage" @handleEdit="handleEdit" @handleDelete="handleDelete">
 	</kt-table>
 	<!--新增编辑界面-->
 	<el-dialog :title="operation?'新增':'编辑'" width="40%" :visible.sync="dialogVisible" :close-on-click-modal="false" :destroy-on-close="true" v-dialogDrag>
-		<el-form :model="dataForm" label-width="80px" :rules="dataFormRules" ref="dataForm" :size="size"
+		<el-form :model="dataForm" label-width="150px" :rules="dataFormRules" ref="dataForm" :size="size" 
 			label-position="right">
 			<el-form-item label="期数" prop="drawIssue" v-if="!operation">
 				<el-input v-model="dataForm.drawIssue" :disabled="!operation" auto-complete="off"></el-input>
 			</el-form-item>
 			<el-form-item label="模式" prop="rkey" >
-				<el-select v-model="dataForm.rkey" :disabled="!operation" style="width: 98%;">
+				<el-select v-model="dataForm.rkey" :disabled="!operation" style="width: 98%;" @change="changeMode">
 					<el-option v-for="(item,index) in modes" :key="index" :label="item.val" :value="item.key"></el-option>
 				</el-select>
 			</el-form-item>
+			<div v-if="hq">
+				<el-form-item label="下期开奖时间" >
+						{{dataForm.drawTime}} <el-button type="primary" size="mini" @click="refresh">刷新</el-button>
+				</el-form-item>
+				<el-form-item label="下单明细" >
+					<div class="order-detail">
+						<div v-for="(item,index) in hq.orders" :key="index" class="order-item">
+							<span>{{ item.artid }}</span>
+							<span>{{ item.bailmoney }}</span>
+						</div>
+					</div>
+				</el-form-item>
+				<el-form-item label="汇总详情" >
+					<el-radio-group v-model="drawName" @input="changeDraw">
+						<el-radio v-for="(item,index) in Object.keys(hq.count)" :key="index" :label="item" border>{{ item }}:{{ hq.count[item] }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+			</div>
+
 			<el-form-item label="行情结果" prop="code"  >
 				<el-input v-model="dataForm.code" auto-complete="off" maxlength="30"></el-input>
 				<span style="color: red;">*数字之间以，分割 例：07,10,06,08,09,04,03,05,01,02</span>
@@ -99,16 +118,77 @@ export default {
 				memo: ''
 			},
 			modes:[
-				{key:'HXBD1',val:'哈希1分宝斗'},
-				{key:'HXBD3',val:'哈希3分宝斗'},
-				{key:'HXBD5',val:'哈希5分宝斗'},
-				{key:'HXNN1',val:'哈希1分牛牛'},
-				{key:'HXNN3',val:'哈希3分牛牛'},
-				{key:'HXNN5',val:'哈希5分牛牛'}
-			]
+				{key:'HXBD1',val:'哈希1分宝斗',mode:2},
+				{key:'HXBD3',val:'哈希3分宝斗',mode:3},
+				{key:'HXBD5',val:'哈希5分宝斗',mode:4},
+				{key:'HXNN1',val:'哈希1分牛牛',mode:5},
+				{key:'HXNN3',val:'哈希3分牛牛',mode:6},
+				{key:'HXNN5',val:'哈希5分牛牛',mode:7}
+			],
+			hq:'',
+			drawName:''
 		}
 	},
 	methods: {
+		changeDraw(val){
+			let ret = ''
+			if(val=='入'){
+				ret = 1
+			}else if(val =='龙'){
+				ret = 2
+			}else if(val =='出'){
+				ret = 3
+			}else if(val =='虎'){
+				ret = 4
+			}
+			let arr = this.geBdArr(ret) || []
+			this.dataForm.code = arr.map(item=>{
+				if(item < 10){
+					item = '0' + item
+				}
+				return item
+			}).join(',')
+		},
+		geBdArr(val){
+			let arr = []
+			let ret = []
+			for(var i = 1;i <= 10;i++){
+				if(i != val){
+					arr.push(i)
+				}
+			}
+			let index = this.getRandomNumber(0,4)
+			for(var i = 0;i<10;i++){
+				if(i < index){
+					let seq = this.getRandomNumber(arr.length-4,arr.length-1)
+					ret[i] = arr[seq]
+					arr.splice(seq,1)
+				}else if(i==index){
+					ret[index] = val
+				}else{
+					let seq = this.getRandomNumber(0,arr.length-1)
+					ret[i] = arr[seq]
+					arr.splice(seq,1)
+				}
+			}
+			return ret
+		},
+		getRandomNumber(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
+		refresh(){
+			this.hq =  ''
+			this.$nextTick(()=>{
+				this.changeMode(this.dataForm.rkey)
+			})
+		},
+		changeMode(val){
+			 this.$api.preCode.getDraw({rkey:val}).then(res=>{
+				this.hq = res.data
+				this.dataForm.drawIssue = this.hq.draw.drawIssue
+				this.dataForm.drawTime = this.hq.draw.nextTime
+			 })
+		},
 		// 获取分页数据
 		findPage: function (data) {
 			if(data !== null) {
@@ -129,6 +209,7 @@ export default {
 		handleAdd: function () {
 			this.dialogVisible = true
 			this.operation = true
+			this.hq = ''
 			this.dataForm= {
 				id:'',
 				dataId:'',
@@ -214,6 +295,18 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.order-detail{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap;
+	.order-item{
+		width: 100px;
+		display: flex;
+		justify-content: space-between;
+		margin-right: 20px;
+		border-bottom: 1px solid #e2e2e2;
+	}
+}
 </style>

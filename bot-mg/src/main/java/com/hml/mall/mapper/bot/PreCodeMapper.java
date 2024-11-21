@@ -1,7 +1,13 @@
 package com.hml.mall.mapper.bot;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hml.mall.entity.bot.PreCode;
+import com.hml.mall.entity.order.Order;
 
 /**
  * <p>
@@ -13,4 +19,8 @@ import com.hml.mall.entity.bot.PreCode;
  */
 public interface PreCodeMapper extends BaseMapper<PreCode> {
 
+	@Select("select ARTID,SUM(BAILMONEY) AS BAILMONEY "
+			+ " from tb_jy_order where mode =#{mode} and BUYORSAL = 'B' and CONTNUM =#{contnum} "
+			+ " group by ARTID ")
+	List<Order> findDraw(@Param("mode")String mode,@Param("contnum")String contnum);
 }
