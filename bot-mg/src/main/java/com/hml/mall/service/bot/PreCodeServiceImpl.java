@@ -130,7 +130,10 @@ public class PreCodeServiceImpl extends ServiceImpl<PreCodeMapper, PreCode> impl
 	
 	@Override
 	public List<Order> findDraw(String model,String contnum) {
-		 
 		return preCodeMapper.findDraw(model, contnum);
+	}
+	@Override
+	public List<Order> findDrawByNiu(String model, String contnum) {
+		return preCodeMapper.findDrawByNiu(model, contnum);
 	}
 }

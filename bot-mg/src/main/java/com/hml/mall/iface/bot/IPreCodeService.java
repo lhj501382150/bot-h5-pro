@@ -41,5 +41,7 @@ public interface IPreCodeService extends IService<PreCode> {
     * 查询下注结果
     */
    List<Order> findDraw(String model,String contnum);
+   
+   List<Order> findDrawByNiu(String model,String contnum);
 
 }

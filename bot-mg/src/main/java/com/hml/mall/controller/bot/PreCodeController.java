@@ -3,7 +3,9 @@ package com.hml.mall.controller.bot;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,10 +107,16 @@ public class PreCodeController {
     	String contnum = String.valueOf(draw.getId() + 1);
     	String mode = draw.getMode();
     	
-    	List<Order> orders = preCodeService.findDraw(mode,contnum);
-    	Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();	
+    	Map<String,Object> data = new HashMap<String, Object>();
+    	data.put("draw", draw);
     	 if("2".equals(mode) || "3".equals(mode) || "4".equals(mode)) {//宝斗
-    		 for(Order item:orders) {
+    		 List<Order> orders = preCodeService.findDraw(mode,contnum);
+    	    Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();	
+    		map.put("入", new BigDecimal(0));
+    		map.put("龙", new BigDecimal(0));
+    		map.put("出", new BigDecimal(0));
+    		map.put("虎", new BigDecimal(0));
+    	    for(Order item:orders) {
     			 String key = item.getArtid();
     			 key = key.substring(0,1);
     			 BigDecimal total = map.get(key);
@@ -119,14 +127,25 @@ public class PreCodeController {
     			 }
     			 map.put(key, total);
     		 }
+        	 data.put("count", map);
+        	 data.put("orders", orders);
+        	 data.put("type", "1");
     	 }else {//牛牛
+    		 List<Order> orders = preCodeService.findDrawByNiu(mode, contnum);
+    		 List<Order> order_p = new ArrayList<Order>();
+    		 List <Order> order_b = new ArrayList<Order>();
     		 
+    		 for(Order item : orders) {
+    			 if(item.getCpright().intValue() == 1) {
+    				 order_p.add(item);
+    			 }else {
+    				 order_b.add(item);
+    			 }
+    		 }
+    		 data.put("porder", order_p);
+    		 data.put("border", order_b);
+    		 data.put("type", "2");
     	 }
-         
-    	 Map<String,Object> data = new HashMap<String, Object>();
-    	 data.put("draw", draw);
-    	 data.put("orders", orders);
-    	 data.put("count", map);
     	 
         return HttpResult.ok(data);
     }

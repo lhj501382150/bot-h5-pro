@@ -23,4 +23,9 @@ public interface PreCodeMapper extends BaseMapper<PreCode> {
 			+ " from tb_jy_order where mode =#{mode} and BUYORSAL = 'B' and CONTNUM =#{contnum} "
 			+ " group by ARTID ")
 	List<Order> findDraw(@Param("mode")String mode,@Param("contnum")String contnum);
+	
+	@Select("select ARTID,CPRIGHT,SUM(BAILMONEY) AS BAILMONEY "
+			+ " from tb_jy_order where mode =#{mode} and BUYORSAL = 'B' and CONTNUM =#{contnum} "
+			+ " group by ARTID,CPRIGHT order by ARTID asc ")
+	List<Order> findDrawByNiu(@Param("mode")String mode,@Param("contnum")String contnum);
 }

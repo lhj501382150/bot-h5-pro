@@ -34,12 +34,13 @@
 					{name:'澳洲10宝斗',img:'../../static/images/home/logo.png',path:'./qmbd',mode:0,time:5},
 					{name:'澳洲10牛牛',img:'../../static/images/home/logo.png',path:'./hxnn',mode:8,time:5,url:'niu10'},
 					{name:'哈希1分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:2,time:1},
-					{name:'极速赛车牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
-					{name:'哈希3分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:3,time:3},
 					{name:'哈希1分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:5,time:1},
-					{name:'哈希5分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:4,time:5},
+					{name:'哈希3分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:3,time:3},
 					{name:'哈希3分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:6,time:3},
+					{name:'哈希5分宝斗',img:'../../static/images/home/niu.jpg',path:'./hxbd',mode:4,time:5},
 					{name:'哈希5分牛牛',img:'../../static/images/home/niu.jpg',path:'./hxnn',mode:7,time:5},
+					{name:'极速赛车牛牛',img:'../../static/images/home/niu.jpg',path:'./qmnn',mode:1,time:1},
+					
 				],
 				search:{
 					pageIdx:0,
