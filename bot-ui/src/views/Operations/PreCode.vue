@@ -106,6 +106,18 @@
 						</el-table-column>
 					</el-table>
 				</el-form-item>
+				<el-form-item label="试算结果" v-if="hq.type==2">
+					<div class="order-detail">
+						<div v-for="(item,index) in niuData" :key="index" class="order-item">
+							<span v-if="index==0">庄：牛{{item}}</span>
+							<span v-else>
+								闲{{index}}:
+								<span v-if="item > 0">牛{{item}}</span>
+								<span v-else>无牛</span>
+							</span>
+						</div>
+					</div>
+				</el-form-item>
 			</div>
 
 			<el-form-item label="行情结果" prop="code"  >
@@ -157,6 +169,9 @@ export default {
 				],
 				code: [
 					{ required: true, message: '请输入行情结果', trigger: 'blur' }
+				],
+				rkey: [
+					{ required: true, message: '请选择模式', trigger: 'blur' }
 				]
 			},
 			// 新增编辑界面数据
@@ -179,21 +194,79 @@ export default {
 			drawName:'',
 			niuDraw:[
 				{x1:false,x2:false,x3:false,x4:false,x5:false}
-			]
+			],
+			niuData:[]
 		}
 	},
 	methods: {
 		getNiuDraw(row){
+			let sum = 0;
+			let index = 0;
+			let ret = []
+			while(sum != 55 && index < 10){
+				ret = this.getRandomHq(row)
+				sum = ret.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+			}
+			if(sum == 55){
+				this.dataForm.code = ret.map(item=>{
+				if(item < 10){
+					item = '0' + item
+				}
+				return item
+			}).join(',')
+			}else{
+				this.$message.error('未发现合适结果，请再次点击重试')
+			}
+		},
+		getRandomHq(row){
+			if(this.niuDraw.length > 0){
+				this.niuDraw.splice(1,1)
+			}
 			this.dataForm.code = ''
+			let winArr = Object.keys(this.niuDraw[0]).filter(key=>this.niuDraw[0][key] === true)
+			let size = winArr.length
+			let ret = []
+			let zjRet = 9
+			let flag = false
+			if(size <= 1){
+				zjRet = this.getRandomNumber(7,9)
+			}else if(size == 2 || size ==3){
+				zjRet = this.getRandomNumber(6,8)
+			}else if(size == 3 || size ==4){
+				zjRet = this.getRandomNumber(1,4)
+			}else if(size == 5){
+				let arr1 = this.shuffleArray([2,3,4,6,7])
+				let arr2 = this.shuffleArray([8,9,10])
+				let arr3 = this.shuffleArray([1,5])
+				ret = [...arr1,...arr2,...arr3]
+				flag = true
+			}
+			let index = 0
+			while(!flag && index < 5){
+				try {
+					ret = this.getResult1(zjRet)
+					flag = true
+				} catch (error) {
+					// this.$message.error('行情结果计算失败，请再次点击重试')
+					flag = false
+				}
+				index++
+			}
+			for(var i=0;i<6;i++){
+				let temp = [ret[i],ret[i+1],ret[i+2],ret[i+3],ret[i+4]]
+				this.niuData[i] = this.countResult(temp)
+			}
+			return ret
+		},
+		getResult1(zjRet){
 			let arr = [1,2,3,4,5,6,7,8,9,10]
-			let zjRet = this.getRandomNumber(7,9)
 			let ret = []
 			ret[0] = this.getRandomNum(arr)
 			ret[1] =  this.getRandomNum(arr)
 			ret[2] =  this.getRandomNum(arr)
 
 			let flag = this.countNiuResult(ret,arr,zjRet)
-			let index = 1
+			let index = 0
 			while(!flag && index <  5){
 				ret = []
 				arr = [1,2,3,4,5,6,7,8,9,10]
@@ -202,34 +275,113 @@ export default {
 				ret[2] =  this.getRandomNum(arr)
 				flag = this.countNiuResult(ret,arr,zjRet)
 				index++
-			}
-			this.dataForm.code = ret.join(',')
+			} 
+			Object.keys(this.niuDraw[0]).forEach((key,index)=>{
+				let legnth = ret.length
+				let temp = [ret[legnth-4],ret[legnth-3],ret[legnth-2],ret[legnth-1]]
+				if(this.niuDraw[0][key]){//比结果大
+					let maxNum = this.getMaxNum(temp,arr,zjRet)
+					index = 1
+					while(maxNum == 0 && index < 5){
+						temp = this.shuffleArray(temp)
+						maxNum = this.getMaxNum(temp,arr,zjRet)
+						index++
+					}
+					if(maxNum == 0){
+						throw new Error('refresh is now')
+					}else{
+						temp[4] = maxNum
+					}
+				}else{//比结果小
+					let minNum = this.getMinNum(temp,arr,zjRet)
+					index = 1
+					while(minNum == 0 && index < 5){
+						temp = this.shuffleArray(temp)
+						minNum = this.getMinNum(temp,arr,zjRet)
+						index++
+					}
+					if(minNum == 0){
+						throw new Error('refresh is now')
+					}else{
+						temp[4] = minNum
+					}
+				}
+
+				ret.splice(ret.length - 4,4)
+				ret = [...ret,...temp]
+			})
+
+			return ret
 		},
+		getMaxNum(ret,arr,zjRet){
+			let minRet = 0
+			if(arr.length == 1){
+				minRet = arr[0]
+				arr = []
+			}else{
+				for(var i=0;i<arr.length;i++){
+					ret[4] = arr[i]
+					let num = this.countResult(ret)
+					if(num > zjRet){
+						minRet = arr[i]
+						arr.splice(i,1)
+						break
+					}
+				} 
+			}
+			return minRet
+		},
+		getMinNum(ret,arr,zjRet){
+			let minRet = 0
+			if(arr.length == 1){
+				minRet = arr[0]
+				arr = []
+			}else{
+				for(var i=0;i<arr.length;i++){
+					ret[4] = arr[i]
+					let num = this.countResult(ret)
+					if(num < zjRet){
+						minRet = arr[i]
+						arr.splice(i,1)
+						break
+					}
+				} 
+			}
+			return minRet
+		},
+		//洗牌算法
+		shuffleArray(array) {
+			for (let i = array.length - 1; i > 0; i--) {
+				let j = Math.floor(Math.random() * (i + 1));
+				[array[i], array[j]] = [array[j], array[i]];
+			}
+			return array;
+		},
+		//计算Z需要结果数字
 		countNiuResult(ret,arr,result){
 			var flag = false
-			if(arr.length > 2){
+			if(arr.length > 1){
 				for(var i=0;i<arr.length;i++){
 					for(var j=i;j<arr.length;j++){
 						ret[3] = arr[i]
 						ret[4] = arr[j]
 						let maxNum = this.countResult(ret)
 						if(maxNum == result){
-							arr.splice(i,1)
 							arr.splice(j,1)
-							console.log(ret,maxNum,'===========')
+							arr.splice(i,1)
 							flag = true
 							break;
 						}
 					}
 					break;
 				}
-				console.log(flag,result)
 				return flag;
 			}else{
 				throw new Error('arr length is error')
 			}
 			
 		},
+		//计算5个数字中最大组合结果
 		countResult(arr){
 			if(arr.length != 5){
 				throw new Error('arr is error')
@@ -245,7 +397,6 @@ export default {
 							let num = sum(nums) % 10
 							if(num > maxNum){
 								maxNum = num
-								console.log(nums,'------------',arr[i],arr[j], arr[m])
 							}
 						}
 					}
@@ -253,6 +404,7 @@ export default {
 			}
 			return maxNum
 		},
+		//随机获取数字并删除
 		getRandomNum(arr){
 			let index = Math.floor(Math.random() * arr.length)
 			let num = arr[index]
@@ -310,6 +462,7 @@ export default {
 			this.dataForm.code = ''
 			this.dataForm.drawIssue = ''
 			this.dataForm.drawTime = ''
+			this.niuData = []
 			this.$nextTick(()=>{
 				this.changeMode(this.dataForm.rkey)
 			})
