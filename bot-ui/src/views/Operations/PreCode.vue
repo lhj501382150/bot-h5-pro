@@ -43,7 +43,7 @@
 				<el-form-item label="下期开奖时间" >
 						{{dataForm.drawTime}} <el-button type="primary" size="mini" @click="refresh">刷新</el-button>
 				</el-form-item>
-				<el-form-item label="下单明细" v-if="hq.type==1">
+				<el-form-item label="宝斗下单明细">
 					<div class="order-detail">
 						<div v-for="(item,index) in hq.orders" :key="index" class="order-item">
 							<span>{{ item.artid }}</span>
@@ -51,12 +51,12 @@
 						</div>
 					</div>
 				</el-form-item>
-				<el-form-item label="汇总详情" v-if="hq.type==1">
-					<el-radio-group v-model="drawName" @input="changeDraw">
+				<el-form-item label="宝斗汇总详情">
+					<el-radio-group v-model="drawName">
 						<el-radio v-for="(item,index) in Object.keys(hq.count)" :key="index" :label="item" border>{{ item }}:{{ hq.count[item] }}</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="平投明细" v-if="hq.type==2">
+				<el-form-item label="牛牛平投明细">
 					<div class="order-detail">
 						<div v-for="(item,index) in hq.porder" :key="index" class="order-item">
 							<span>闲{{ item.artid }}</span>
@@ -64,7 +64,7 @@
 						</div>
 					</div>
 				</el-form-item>
-				<el-form-item label="倍投明细" v-if="hq.type==2">
+				<el-form-item label="牛牛倍投明细" >
 					<div class="order-detail">
 						<div v-for="(item,index) in hq.border" :key="index" class="order-item">
 							<span>闲{{ item.artid }}</span>
@@ -72,7 +72,7 @@
 						</div>
 					</div>
 				</el-form-item>
-				<el-form-item label="输赢结果(绿色赢)" v-if="hq.type==2">
+				<el-form-item label="输赢结果(绿色赢)" >
 					<el-table :data="niuDraw" style="width: 100%">
 						<el-table-column prop="x1" label="闲一" >
 							<template slot-scope="scope">
@@ -99,14 +99,18 @@
 								<el-switch  v-model="scope.row.x5"   active-color="#13ce66" > </el-switch>
 							</template>
 						</el-table-column>
-						<el-table-column prop="oprea" label="操作" >
+						<!-- <el-table-column prop="oprea" label="操作" >
 							<template slot-scope="scope">
 								<el-button type="primary" size="mini" @click="getNiuDraw(scope.row)">生成结果</el-button>
 							</template>
-						</el-table-column>
+						</el-table-column> -->
 					</el-table>
 				</el-form-item>
-				<el-form-item label="试算结果" v-if="hq.type==2">
+
+				<el-form-item>
+					<el-button type="primary" size="small" @click="tryResult">试算结果</el-button>
+				</el-form-item>
+				<el-form-item label="试算结果">
 					<div class="order-detail">
 						<div v-for="(item,index) in niuData" :key="index" class="order-item">
 							<span v-if="index==0">庄：牛{{item}}</span>
@@ -183,12 +187,12 @@ export default {
 				memo: ''
 			},
 			modes:[
-				{key:'HXBD1',val:'哈希1分宝斗',mode:2},
-				{key:'HXBD3',val:'哈希3分宝斗',mode:3},
-				{key:'HXBD5',val:'哈希5分宝斗',mode:4},
-				{key:'HXNN1',val:'哈希1分牛牛',mode:5},
-				{key:'HXNN3',val:'哈希3分牛牛',mode:6},
-				{key:'HXNN5',val:'哈希5分牛牛',mode:7}
+				{key:'HXBD1',val:'哈希1分',mode:2},
+				{key:'HXBD3',val:'哈希3分',mode:3},
+				{key:'HXBD5',val:'哈希5分',mode:4},
+				// {key:'HXNN1',val:'哈希1分牛牛',mode:5},
+				// {key:'HXNN3',val:'哈希3分牛牛',mode:6},
+				// {key:'HXNN5',val:'哈希5分牛牛',mode:7}
 			],
 			hq:'',
 			drawName:'',
@@ -199,13 +203,23 @@ export default {
 		}
 	},
 	methods: {
-		getNiuDraw(row){
+		tryResult(){
+			if(!this.drawName){
+				this.$message.error('请选择宝斗结果')
+				return
+			}
+			let num = this.changeDraw(this.drawName)
+			let row = this.niuDraw[0]
+			this.getNiuDraw(row,num)
+		},
+		getNiuDraw(row,num){
 			let sum = 0;
 			let index = 0;
 			let ret = []
 			while(sum != 55 && index < 10){
-				ret = this.getRandomHq(row)
+				ret = this.getRandomHq(row,num)
 				sum = ret.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+				index++
 			}
 			if(sum == 55){
 				this.dataForm.code = ret.map(item=>{
@@ -218,7 +232,7 @@ export default {
 				this.$message.error('未发现合适结果，请再次点击重试')
 			}
 		},
-		getRandomHq(row){
+		getRandomHq(row,num){
 			if(this.niuDraw.length > 0){
 				this.niuDraw.splice(1,1)
 			}
@@ -244,7 +258,7 @@ export default {
 			let index = 0
 			while(!flag && index < 5){
 				try {
-					ret = this.getResult1(zjRet)
+					ret = this.getResult1(zjRet,num)
 					flag = true
 				} catch (error) {
 					// this.$message.error('行情结果计算失败，请再次点击重试')
@@ -258,12 +272,13 @@ export default {
 			}
 			return ret
 		},
-		getResult1(zjRet){
+		getResult1(zjRet,num){
 			let arr = [1,2,3,4,5,6,7,8,9,10]
 			let ret = []
 			ret[0] = this.getRandomNum(arr)
 			ret[1] =  this.getRandomNum(arr)
 			ret[2] =  this.getRandomNum(arr)
+			this.replaceNum(ret,num,arr) 
 
 			let flag = this.countNiuResult(ret,arr,zjRet)
 			let index = 0
@@ -273,6 +288,8 @@ export default {
 				ret[0] = this.getRandomNum(arr)
 				ret[1] =  this.getRandomNum(arr)
 				ret[2] =  this.getRandomNum(arr)
+				this.replaceNum(ret,num,arr) 
+				
 				flag = this.countNiuResult(ret,arr,zjRet)
 				index++
 			} 
@@ -312,6 +329,26 @@ export default {
 			})
 
 			return ret
+		},
+		replaceNum(ret,num,arr){
+			let index = 0
+			if(!ret.includes(num)){
+				index = this.getRandomNumber(0, 2) 
+				let tempNum = ret[index]
+				ret[index] = num
+				let arrIndex = arr.findIndex(item=>item===num)
+				arr[arrIndex] = tempNum
+			}else{
+				index = ret.findIndex(item=>item===num)
+			}
+			
+			let temp = [1,2,3,4].filter(item=> item !== num)
+			for(var i =0 ;i< index;i++){
+				if(temp.includes(ret[i])){
+					 ret[index] = ret[i]
+					 ret[i] = num
+				}
+			} 
 		},
 		getMaxNum(ret,arr,zjRet){
 			let minRet = 0
@@ -422,13 +459,14 @@ export default {
 			}else if(val =='虎'){
 				ret = 4
 			}
-			let arr = this.geBdArr(ret) || []
-			this.dataForm.code = arr.map(item=>{
-				if(item < 10){
-					item = '0' + item
-				}
-				return item
-			}).join(',')
+			return ret
+			// let arr = this.geBdArr(ret) || []
+			// this.dataForm.code = arr.map(item=>{
+			// 	if(item < 10){
+			// 		item = '0' + item
+			// 	}
+			// 	return item
+			// }).join(',')
 		},
 		geBdArr(val){
 			let arr = []
@@ -560,7 +598,10 @@ export default {
       let data = this.modes.find(item=>{
 		return item.key == cellValue
 	  })
-	  return data.val
+	  if(data && data.val){
+		return data.val
+	  }
+	  return cellValue
     },
 		// 处理表格列过滤显示
 	initColumns: function () {
