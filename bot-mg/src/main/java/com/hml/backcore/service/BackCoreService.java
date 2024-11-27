@@ -2,6 +2,7 @@ package com.hml.backcore.service;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hml.backcore.config.BackCoreConfig;
 import com.hml.utils.HttpClientUtils;
@@ -53,5 +54,20 @@ public class BackCoreService {
 			result = e.getMessage();
 		}
 		return result;
+	}
+	
+	public JSONArray getOrderDraw(JSONObject data){
+		JSONArray arr = new JSONArray();
+		try {
+			String ret = HttpClientUtils.doPost(BackCoreConfig.URL + BackCoreConfig.GET_ORDER_RESULT, data.toJSONString(),null);
+			JSONObject json = JSONObject.parseObject(ret);
+			if(!"0".equals(json.getString("iCode"))){
+				throw new Exception(json.getString("sMsg"));
+			}
+			arr = json.getJSONArray("rData");
+		} catch (Exception e) {
+			log.error("请求下单异常：",e);
+		}
+		return arr;
 	}
 }

@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hml.backcore.service.BackCoreService;
 import com.hml.core.http.HttpResult;
 import com.hml.core.page.PageRequest;
 import com.hml.core.page.PageResult;
+import com.hml.mall.entity.bot.Chat;
 import com.hml.mall.entity.bot.PreCode;
 import com.hml.mall.entity.order.Order;
+import com.hml.mall.iface.bot.IChatService;
 import com.hml.mall.iface.bot.IPreCodeService;
 import com.hml.mall.util.SecurityUtils;
 import com.hml.redis.RedisUtils;
@@ -42,6 +46,12 @@ public class PreCodeController {
     private IPreCodeService  preCodeService;
     @Autowired
     private RedisUtils redisUitls;
+    
+    @Autowired
+    private BackCoreService backCoreService;
+    
+    @Autowired
+    private IChatService chatService;
 
     /**
     * 保存
@@ -110,27 +120,19 @@ public class PreCodeController {
     	Map<String,Object> data = new HashMap<String, Object>();
     	data.put("draw", draw);
 //    	宝斗情况
+    	List<Chat> chatList = chatService.list();
+    	Chat chat = chatList.get(0);
     	List<Order> orders = preCodeService.findDraw(mode,contnum);
-	    Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();	
-		map.put("入", new BigDecimal(0));
-		map.put("龙", new BigDecimal(0));
-		map.put("出", new BigDecimal(0));
-		map.put("虎", new BigDecimal(0));
-	    for(Order item:orders) {
-			 String key = item.getArtid();
-			 key = key.substring(0,1);
-			 BigDecimal total = map.get(key);
-			 if(total == null) {
-				 total = item.getBailmoney();
-			 }else {
-				 total = total.add(item.getBailmoney());
-			 }
-			 map.put(key, total);
-		 }
-    	 data.put("count", map);
+    	JSONObject json = new JSONObject();
+    	json.put("mode", mode);
+    	json.put("dataId", contnum);
+    	json.put("botId", Long.valueOf(chat.getChatid()));
+    	JSONArray arr = backCoreService.getOrderDraw(json);
+    	 data.put("count", arr);
     	 data.put("orders", orders);
     	
 //    	 牛牛情况
+    	 mode = String.valueOf(Integer.parseInt(mode) + 3);
     	 List<Order> orders_n = preCodeService.findDrawByNiu(mode, contnum);
 		 List<Order> order_p = new ArrayList<Order>();
 		 List <Order> order_b = new ArrayList<Order>();

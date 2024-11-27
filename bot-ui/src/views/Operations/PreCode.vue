@@ -53,7 +53,10 @@
 				</el-form-item>
 				<el-form-item label="宝斗汇总详情">
 					<el-radio-group v-model="drawName">
-						<el-radio v-for="(item,index) in Object.keys(hq.count)" :key="index" :label="item" border>{{ item }}:{{ hq.count[item] }}</el-radio>
+						<el-radio v-for="(item,index) in hq.count" :key="index" :label="item.bNo" border>
+								<span>{{ getDrawName(item.bNo) }}</span>
+								<span style="margin-left:10px;color:red;">{{item.loss}}</span>/<span style="color:green;">{{item.bailmoney}}</span> 
+						</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="牛牛平投明细">
@@ -289,7 +292,7 @@ export default {
 				ret[1] =  this.getRandomNum(arr)
 				ret[2] =  this.getRandomNum(arr)
 				this.replaceNum(ret,num,arr) 
-				
+
 				flag = this.countNiuResult(ret,arr,zjRet)
 				index++
 			} 
@@ -448,17 +451,30 @@ export default {
 			arr.splice(index,1)
 			return num
 		},
-		changeDraw(val){
-			let ret = ''
-			if(val=='入'){
-				ret = 1
-			}else if(val =='龙'){
-				ret = 2
-			}else if(val =='出'){
-				ret = 3
-			}else if(val =='虎'){
-				ret = 4
+		getDrawName(val){
+			let ret = val
+			if(val==1){
+				ret = '入'
+			}else if(val ==2){
+				ret = '龙'
+			}else if(val ==3){
+				ret = '出'
+			}else if(val ==4){
+				ret = '虎'
 			}
+			return ret
+		},
+		changeDraw(val){
+			let ret = val
+			// if(val=='入'){
+			// 	ret = 1
+			// }else if(val =='龙'){
+			// 	ret = 2
+			// }else if(val =='出'){
+			// 	ret = 3
+			// }else if(val =='虎'){
+			// 	ret = 4
+			// }
 			return ret
 			// let arr = this.geBdArr(ret) || []
 			// this.dataForm.code = arr.map(item=>{
