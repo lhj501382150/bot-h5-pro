@@ -349,6 +349,9 @@ z<template>
 								this.result.data = this.result.CODE.split(',') || []
 								this.parseResult()
 								this.leftTime = getSecond(this.result.TIME)
+								if(this.mode==8){
+									this.leftTime += 15
+								}
 								this.fillTime()
 								this.getUserBalance()
 								this.loadData()

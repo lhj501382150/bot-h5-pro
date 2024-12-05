@@ -148,7 +148,7 @@ public class HqTaskManager {
 		}
 	}
 	
-	@Scheduled(cron="40 3/5 * * * ?")
+	@Scheduled(cron="40 4/5 * * * ?")
 	public void gethxd5() {
 		try {
 			String key = "HXBD5";

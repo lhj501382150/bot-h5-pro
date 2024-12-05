@@ -55,7 +55,7 @@
 					<el-radio-group v-model="drawName">
 						<el-radio v-for="(item,index) in hq.count" :key="index" :label="item.bNo" border>
 								<span>{{ getDrawName(item.bNo) }}</span>
-								<span style="margin-left:10px;color:red;">{{item.loss}}</span>/<span style="color:green;">{{item.bailmoney}}</span> 
+								<span style="margin-left:10px;color:red;">{{item.loss}}</span> / <span style="color:green;">{{item.bailmoney}}</span> 
 						</el-radio>
 					</el-radio-group>
 				</el-form-item>
@@ -568,6 +568,12 @@ export default {
 		submitForm: function () {
 			this.$refs.dataForm.validate((valid) => {
 				if (valid) {
+					let ret = this.dataForm.code.split(',').map(item=>parseInt(item))
+					let sum = ret.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+					if(sum != 55){
+						this.$message.error('开奖结果数据不正确:' + ret.sort((a,b)=>a-b))
+						return
+					}
 					this.$confirm('确认提交吗？', '提示', {}).then(() => {
 						this.editLoading = true
 						let params = Object.assign({}, this.dataForm)
