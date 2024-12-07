@@ -1,0 +1,715 @@
+html {
+	/*margin-left: -462px;*/
+	margin-left: 0;
+	overflow: hidden;
+	/*top:3px;*/
+	left: 0
+}
+
+body {
+	font-family: "Microsoft YaHei", 微软雅黑, STXihei, 华文细黑, serif, Georgia, "Times New Roman";
+	color: #fff;
+	/*transform: scale(0.313,0.284);/!*iphone 6s plus margin:85px;*!/*/
+	/*transform: scale(0.2715,0.218); /*三星s4 margin:95px;*/
+	margin: 0 !important;
+}
+
+.container {
+	width: 750upx;
+	height: 870px;
+	overflow: hidden;
+	position: fixed;
+}
+
+.header {
+	height: 60upx;
+	background-image: url("@/static/images/top_header.jpg");
+	position: relative;
+}
+
+.position {
+	position: absolute;
+	top: 10upx;
+	left: 10upx;
+}
+
+.positm {
+	float: left;
+	background: url('@/static/images/numbersprite.png') no-repeat top left;
+	width: 40upx;
+	height: 40upx;
+	background-size: 40upx 400upx;
+	margin-right: 3upx;
+}
+
+.num1 {
+	background-position: 0 0px;
+}
+
+.num2 {
+	background-position: 0 -40upx;
+}
+
+.num3 {
+	background-position: 0 -80upx;
+}
+
+.num4 {
+	background-position: 0 -120upx;
+}
+
+.num5 {
+	background-position: 0 -160upx;
+}
+
+.num6 {
+	background-position: 0 -200upx;
+}
+
+.num7 {
+	background-position: 0 -240upx;
+}
+
+.num8 {
+	background-position: 0 -280upx;
+}
+
+.num9 {
+	background-position: 0 -320upx;
+}
+
+.num10 {
+	background-position: 0 -360upx;
+}
+
+.scenary {
+	height: 70upx;
+	position: relative;
+}
+
+.scenaryitm {
+	position: absolute;
+	left: -750upx;
+}
+.scenaryitm-img{
+	width: 1500upx;
+	height: 70upx;
+}
+.road {
+	height: 300upx;
+	position: relative;
+}
+
+.roadani {
+	position: absolute;
+	width: 1500upx;
+	height: 300upx;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+}
+
+.roaditm {
+	position: absolute;
+	top: 0;
+	left: -750upx;
+	width: 100%;
+	height: 100%;
+}
+.road-img{
+	width: 1500upx;
+	height: 300upx;
+}
+.flag {
+	position: absolute;
+	bottom: 0;
+	left: -150px;
+}
+
+.car1,
+.car2,
+.car3,
+.car4,
+.car5,
+.car6,
+.car7,
+.car8,
+.car9,
+.car10 {
+	position: absolute;
+}
+.car1 {
+	top: -20upx;
+	left: 670upx;
+	image{
+		width: 95upx;
+		height: 26upx;
+	}
+}
+
+.car2 {
+	top: 0upx;
+	left: 665upx;
+	image{
+		width: 100upx;
+		height: 26upx;
+	}
+}
+
+.car3 {
+	top: 20upx;
+	left: 658upx;
+	image{
+		width: 105upx;
+		height: 28upx;
+	}
+}
+
+.car4 {
+	top: 50upx;
+	left: 650upx;
+	image{
+		width: 110upx;
+		height: 31upx;
+	}
+}
+
+.car5 {
+	top: 82upx;
+	left: 645upx;
+	image{
+		width: 115upx;
+		height: 34upx;
+	}
+}
+
+.car6 {
+	top: 117upx;
+	left: 640upx;
+	image{
+		width: 120upx;
+		height: 34upx;
+	}
+}
+
+.car7 {
+	top: 150upx;
+	left: 630upx;
+	image{
+		width: 125upx;
+		height: 35upx;
+	}
+}
+
+.car8 {
+	top: 185upx;
+	left: 625upx;
+	image{
+		width: 130upx;
+		height: 35upx;
+	}
+}
+
+.car9 {
+	top: 220upx;
+	left: 615upx;
+	image{
+		width: 135upx;
+		height: 40upx;
+	}
+}
+
+.car10 {
+	top: 260upx;
+	left: 610upx;
+	image{
+		width: 140upx;
+		height: 40upx;
+	}
+}
+
+.roadstart {
+	position: absolute;
+	top: 0;
+	left: 560upx;
+	display: block;
+}
+.roadstart-img{
+	height: 300upx;
+	width: 100upx;
+}
+.wheel1a {
+	position: absolute;
+	left: 29px;
+	top: 21px;
+	display: none;
+}
+
+.wheel1b {
+	position: absolute;
+	left: 124px;
+	top: 20px;
+	display: none;
+}
+
+.wheel2a {
+	position: absolute;
+	left: 29px;
+	top: 21px;
+	display: none;
+}
+
+.wheel2b {
+	position: absolute;
+	left: 128px;
+	top: 20px;
+	display: none;
+}
+
+.wheel3a {
+	position: absolute;
+	left: 32px;
+	top: 23px;
+	display: none;
+}
+
+.wheel3b {
+	position: absolute;
+	left: 133px;
+	top: 22px;
+	display: none;
+}
+
+.wheel4a {
+	position: absolute;
+	left: 32px;
+	top: 23px;
+	display: none;
+}
+
+.wheel4b {
+	position: absolute;
+	left: 135px;
+	top: 23px;
+	display: none;
+}
+
+.wheel5a {
+	position: absolute;
+	left: 36px;
+	top: 24px;
+	display: none;
+}
+
+.wheel5b {
+	position: absolute;
+	left: 149px;
+	top: 23px;
+	display: none;
+}
+
+.wheel6a {
+	position: absolute;
+	left: 39px;
+	top: 27px;
+	display: none;
+}
+
+.wheel6b {
+	position: absolute;
+	left: 159px;
+	top: 26px;
+	display: none;
+}
+
+.wheel7a {
+	position: absolute;
+	left: 39px;
+	top: 32px;
+	display: none;
+}
+
+.wheel7b {
+	position: absolute;
+	left: 166px;
+	top: 31px;
+	display: none;
+}
+
+.wheel8a {
+	position: absolute;
+	left: 42px;
+	top: 31px;
+	display: none;
+}
+
+.wheel8b {
+	position: absolute;
+	left: 172px;
+	top: 31px;
+	display: none;
+}
+
+.wheel9a {
+	position: absolute;
+	left: 44px;
+	top: 33px;
+	display: none;
+}
+
+.wheel9b {
+	position: absolute;
+	left: 182px;
+	top: 32px;
+	display: none;
+}
+
+.wheel10a {
+	position: absolute;
+	left: 46px;
+	top: 35px;
+	display: none;
+}
+
+.wheel10b {
+	position: absolute;
+	left: 191px;
+	top: 33px;
+	display: none;
+}
+
+.trafficlight {
+	position: absolute;
+	top: 100upx;
+	left: 160upx;
+	background-image: url("@/static/images/trafficlight.png");
+	background-size: 100% 100%;
+	width: 318upx;
+	height: 64upx;
+}
+
+.redlight {
+	position: absolute;
+	left: 190upx;
+	top: -15upx;
+	width: 146upx;
+	height: 92upx;
+	background-image: url('@/static/images/lightred.png');
+	background-size: 100% 100%;
+}
+
+.yellowlight {
+	position: absolute;
+	left: 90upx;
+	top: -15upx;
+	width: 146upx;
+	height: 92upx;
+	background-image: url('@/static/images/lightyellow.png');
+	background-size: 100% 100%;
+}
+
+.greenlight {
+	position: absolute;
+	left: -10upx;
+	top: -15upx;
+	width: 146upx;
+	height: 92upx;
+	background-image: url('@/static/images/lightgreen.png');
+	background-size: 100% 100%;
+}
+
+.countdownnum {
+	position: absolute;
+	top: -50upx;
+	left: 105upx;
+	font-size: 60upx;
+	line-height: 40upx;
+	color: #fff;
+	text-align: right;
+}
+
+.countdownnum2 {
+	position: absolute;
+	top: -35upx;
+	left: 270upx;
+	font-size: 30upx;
+	line-height: 30upx;
+	color: #fff;
+	text-align: left;
+}
+
+.currentdraw {
+	position: absolute;
+	right: 40upx;
+	top: 15upx;
+	font-size: 24upx;
+	width: 200upx;
+	white-space: nowrap;
+	color: #fff;
+}
+.currentdrawid {
+	font-family: arial;
+}
+
+.footer {
+	height: 140px;
+	width: 100%;
+	background-color: #202020;
+	position: absolute;
+	font-size: 31px;
+	top: 753px;
+}
+
+.footer1 {
+	margin-top: 10px;
+	margin-left: 13px;
+	width: 370px;
+	height: 88px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	white-space: nowrap
+}
+
+.footer1_1 {
+	float: left;
+	width: 80px;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+
+.footer1_2 {
+	float: left;
+	width: 250px;
+	margin-left: 10px;
+	margin-top: 16px;
+	line-height: 28px;
+	font-family: arial;
+}
+
+.footer2 {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 370px;
+	height: 88px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	white-space: nowrap
+}
+
+.footer2_1 {
+	float: left;
+	width: 141px;
+	margin-left: 5px;
+	margin-top: 20px;
+}
+
+.footer2_2 {
+	float: left;
+	margin-left: 10px;
+	margin-top: 12px;
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	background: #0191de;
+	background: -moz-linear-gradient(top, #0191de 0%, #09418b 100%);
+	background: -webkit-linear-gradient(top, #0191de 0%, #09418b 100%);
+	background: linear-gradient(to bottom, #0191de 0%, #09418b 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0191de', endColorstr='#09418b', GradientType=0);
+}
+
+.footer3 {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 530px;
+	height: 88px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	white-space: nowrap
+}
+
+.footer4 {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 600px;
+	height: 88px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	white-space: nowrap
+}
+
+.footer4_1 {
+	float: left;
+	width: 150px;
+	margin-left: 5px;
+	margin-top: 20px;
+}
+
+.footer4_2 {
+	float: left;
+	margin-left: 10px;
+	margin-top: 12px;
+	width: 120px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	background: #0191de;
+	background: -moz-linear-gradient(top, #0191de 0%, #09418b 100%);
+	background: -webkit-linear-gradient(top, #0191de 0%, #09418b 100%);
+	background: linear-gradient(to bottom, #0191de 0%, #09418b 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0191de', endColorstr='#09418b', GradientType=0);
+}
+
+.flashlight {
+	width: 100%;
+	height: 639px;
+	background-color: #fff;
+	position: absolute;
+	top: 114px;
+	display: none;
+}
+
+
+/*
+@media screen and (orientation:portrait) {
+	.footer {
+		display: block;
+	}
+}
+ landscape 
+@media screen and (orientation:landscape) {
+	.footer {
+		display: none;
+	}
+}
+*/
+
+.wind {
+	position: absolute;
+	top: -3px;
+	left: -11px;
+	display: none;
+}
+
+.flame {
+	position: absolute;
+	display: none;
+}
+
+.page1 {
+	display: block;
+}
+
+.resultpage {
+	width: 750upx;
+	height: 300upx;
+	position: relative;
+	background-image: url("@/static/images/resultbg.jpg");
+	background-size: 100% 100%;
+}
+
+.resultitm {
+	position: absolute;
+	opacity: 1;
+	filter: alpha(opacity=0);
+	/* For IE8 and earlier */
+}
+
+.result1 {
+	top: 30upx;
+	left: 295upx;
+	background-image: url('@/static/images/result1.png');
+	background-size: 100% 100%;
+	width: 162upx;
+	height: 103upx;
+}
+
+.result2 {
+	top: 15upx;
+	left: 80upx;
+	background-image: url('@/static/images/result2.png');
+	background-size: 100% 100%;
+	width: 130upx;
+	height: 82upx;
+}
+
+.result3 {
+	top: 15upx;
+	right: 80upx;
+	background-image: url('@/static/images/result3.png');
+	background-size: 100% 100%;
+	width: 130upx;
+	height: 82upx;
+}
+
+.resultcar1 {
+	top: 160upx;
+	left: 200upx;
+	width: 317upx;
+	height: 120upx;
+	z-index: 99;
+	image{
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.resultcar2 {
+	top: 120upx;
+	left: 50upx;
+	width: 273upx;
+	height: 129upx;
+	image{
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.resultcar3 {
+	top: 120upx;
+	right: 70upx;
+	width: 211upx;
+	height: 93upx;
+	image{
+		width: 100%;
+		height: 100%;
+	}
+}
+
+#preloader {
+	width: 230% !important;
+}
+
+button {
+	display: none;
+	/*margin-top:850px;*/
+}
+
+#closeSound {
+	display: inline-block;
+	height: 90px;
+    width: 90px;
+	background: url"(@/static/images/vulebtn.png") no-repeat 0 8%;
+	background-size: 90%;
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	margin-top: -20px;
+}
+.closesoundbtn{
+	background-position-y: 85% !important;
+}
