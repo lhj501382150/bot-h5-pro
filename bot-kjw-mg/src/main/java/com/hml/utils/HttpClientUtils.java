@@ -27,6 +27,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -58,6 +59,8 @@ public class HttpClientUtils {
 		        }
 	            //发送get请求
 	            HttpGet request = new HttpGet(url);
+	            request.addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36");
+	            request.addHeader("Priority", "u=1, i");
 	            HttpResponse response = httpclient.execute(request); 
 	            
 	            StatusLine status = response.getStatusLine();

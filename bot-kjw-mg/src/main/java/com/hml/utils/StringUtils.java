@@ -1,5 +1,7 @@
 package com.hml.utils;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * 字符串工具类
  * @author hml
@@ -40,5 +42,16 @@ public class StringUtils {
         return str == null ? null : str.trim();
     }
 
+	 public static String getStr(JSONArray arr) {
+		StringBuffer buff = new StringBuffer();
+		for(int i = 0;i<arr.size();i++) {
+			if(i == arr.size() - 1) {
+				buff.append(arr.get(i));
+			}else {
+				buff.append(arr.get(i)).append(",");
+			}
+		}
+		return buff.toString();
+	}
 	 
 }

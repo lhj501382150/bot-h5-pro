@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hml.back.service.BackCoreService;
 import com.hml.core.page.MybatisPlusPageHelper;
 import com.hml.core.page.PageRequest;
 import com.hml.core.page.PageResult;
@@ -28,6 +30,9 @@ public class DrawServiceImpl extends ServiceImpl<DrawMapper, Draw> implements ID
 
 	@Autowired
 	private DrawMapper drawMapper;
+	
+	@Autowired
+	private BackCoreService backCoreService;
 
     @Override
     public List< Draw> list(Draw model) {
@@ -38,7 +43,7 @@ public class DrawServiceImpl extends ServiceImpl<DrawMapper, Draw> implements ID
     @Override
 	public PageResult findPage(PageRequest pageRequest) {
 		 
-		return MybatisPlusPageHelper.findPage(pageRequest, drawMapper);
+		return MybatisPlusPageHelper.findPage(pageRequest, drawMapper,"findPage");
 	}
     
     @Override
@@ -47,4 +52,20 @@ public class DrawServiceImpl extends ServiceImpl<DrawMapper, Draw> implements ID
     	return drawMapper.getLast(mode);
     }
 
+    @Override
+	public List<Draw> getNewDraws() {
+		 
+		return drawMapper.getNewDraws();
+	}
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+	public boolean save(Draw entity) {
+		try {
+			backCoreService.addHqData(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return super.save(entity);
+	}
 }

@@ -1,24 +1,13 @@
-html {
-	/*margin-left: -462px;*/
-	margin-left: 0;
-	overflow: hidden;
-	/*top:3px;*/
-	left: 0
-}
+ 
 
 body {
-	font-family: "Microsoft YaHei", 微软雅黑, STXihei, 华文细黑, serif, Georgia, "Times New Roman";
-	color: #fff;
-	/*transform: scale(0.313,0.284);/!*iphone 6s plus margin:85px;*!/*/
-	/*transform: scale(0.2715,0.218); /*三星s4 margin:95px;*/
-	margin: 0 !important;
+	margin: 0 auto;
+	max-width: 480px;
 }
 
 .container {
 	width: 750upx;
-	height: 870px;
-	overflow: hidden;
-	position: fixed;
+	/* position: fixed; */
 }
 
 .header {
@@ -234,6 +223,12 @@ body {
 	left: 560upx;
 	display: block;
 }
+.roadend {
+	position: absolute;
+	top: 0;
+	left: 80upx;
+	display: block;
+}
 .roadstart-img{
 	height: 300upx;
 	width: 100upx;
@@ -386,6 +381,23 @@ body {
 	background-size: 100% 100%;
 	width: 318upx;
 	height: 64upx;
+}
+@keyframes shrinkAndFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1); /* 初始大小 */
+  }
+  to {
+    opacity: 0;
+    transform: scale(0); /* 缩小到0 */
+  }
+}
+
+.trafficlight-out {
+  animation-name: shrinkAndFadeOut;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 }
 
 .redlight {
@@ -600,14 +612,17 @@ body {
 
 .wind {
 	position: absolute;
-	top: -3px;
-	left: -11px;
-	display: none;
+	top: 3upx;
+	left: -15upx;
+	/* display: none; */
 }
 
 .flame {
 	position: absolute;
-	display: none;
+	width: 30upx!important;
+	height: 20upx!important;
+	top: 20upx;
+	/* display: none; */
 }
 
 .page1 {
@@ -616,7 +631,7 @@ body {
 
 .resultpage {
 	width: 750upx;
-	height: 300upx;
+	height: 400upx;
 	position: relative;
 	background-image: url("@/static/images/resultbg.jpg");
 	background-size: 100% 100%;
@@ -657,7 +672,7 @@ body {
 }
 
 .resultcar1 {
-	top: 160upx;
+	top: 200upx;
 	left: 200upx;
 	width: 317upx;
 	height: 120upx;
@@ -669,7 +684,7 @@ body {
 }
 
 .resultcar2 {
-	top: 120upx;
+	top: 160upx;
 	left: 50upx;
 	width: 273upx;
 	height: 129upx;
@@ -680,7 +695,7 @@ body {
 }
 
 .resultcar3 {
-	top: 120upx;
+	top: 160upx;
 	right: 70upx;
 	width: 211upx;
 	height: 93upx;
@@ -690,8 +705,10 @@ body {
 	}
 }
 
-#preloader {
-	width: 230% !important;
+.preloader {
+	width: 750upx;
+	height: 320upx;
+	background-color: #000;
 }
 
 button {
@@ -712,4 +729,47 @@ button {
 }
 .closesoundbtn{
 	background-position-y: 85% !important;
+}
+.color01{
+	background-color:#FFD700;
+}
+.color02{
+	background-color:#00BFFF;
+}
+.color03{
+	background-color:#8B4513;
+}
+.color04{
+	background-color:#FFA500;
+}
+.color05{
+	background-color:#48D1CC;
+}
+.color06{
+	background-color:#7B68EE;
+}
+.color07{
+	background-color:#778899;
+}
+.color08{
+	background-color:#DC143C;
+}
+.color09{
+	background-color:#FA8072;
+}
+.color10{
+	background-color:#32CD32;
+}
+
+.color1{
+	background-color:#32CD32;
+}
+.color1{
+	background-color:#32CD32;
+}
+.color2{
+	background-color:#00BFFF;
+}
+.color3{
+	background-color:#cf1609;
 }

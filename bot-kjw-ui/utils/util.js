@@ -115,3 +115,33 @@ export const shuffleArray = (array)=> {
 	}
 	return array;
 }
+
+export const convertTime = (num)=>{
+	var shownum = String(num);
+	var countnum = shownum.length;
+	if(countnum == 1) {
+		shownum = "0" + shownum;
+		return shownum;
+	} else {
+		return shownum;
+	}
+}
+export const countdown =(sec)=>{
+	var minute = sec / 60;
+	minute = Math.floor(minute);
+	if(minute == 0) {
+		var showminute = "00";
+	} else {
+		var showminute = String(minute);
+		showminute = this.convertTime(showminute);
+	}
+
+	var second = sec - (minute * 60);
+	var showsec = this.convertTime(second);
+
+	if(sec < 0) {
+		this.countdownnum = '00:00'
+	} else {
+		this.countdownnum = showminute + ":" + showsec
+	}
+}

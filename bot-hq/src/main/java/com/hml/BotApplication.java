@@ -11,6 +11,9 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import com.hml.bot.BaseBot;
 import com.hml.config.BotConfig;
 import com.hml.thread.GetDataThread;
+import com.hml.thread.Hash1Thread;
+import com.hml.thread.Hash3Thread;
+import com.hml.thread.Hash5Thread;
 import com.hml.thread.NiuGetDataThread;
 
 @SpringBootApplication
@@ -33,6 +36,9 @@ public class BotApplication {
 		    
 		    new GetDataThread().start();
 		    new NiuGetDataThread().start();
+		    new Hash1Thread().start();
+		    new Hash3Thread().start();
+		    new Hash5Thread().start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

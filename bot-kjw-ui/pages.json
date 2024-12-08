@@ -11,11 +11,75 @@
 			"path" : "components/draw/draw",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "开奖网",
 				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/all/all",
+			"style" : 
+			{
+				"navigationBarTitleText" : "开奖网",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/live/live",
+			"style" : 
+			{
+				"navigationBarTitleText" : "开奖网",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/car/car",
+			"style" : 
+			{
+				"navigationBarTitleText" : "开奖网",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/result/result",
+			"style" : 
+			{
+				"enablePullDownRefresh" : false,
+				"navigationStyle":"custom"
 			}
 		}
 	],
+	"tabBar": {
+		"color": "#757575",
+		"selectedColor": "#0066ec",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"selectedIconPath": "static/images/tabs/hot2.png",
+				"iconPath": "static/images/tabs/hot1.png",
+				"text": "热门"
+			},
+			{
+				"pagePath": "pages/all/all",
+				"selectedIconPath": "static/images/tabs/all2.png",
+				"iconPath": "static/images/tabs/all1.png",
+				"text": "全部"
+			},
+			{
+				"pagePath": "pages/live/live",
+				"selectedIconPath": "static/images/tabs/live2.png",
+				"iconPath": "static/images/tabs/live1.png",
+				"text": "开奖直播"
+			},
+			{
+				"pagePath": "pages/car/car",
+				"selectedIconPath": "static/images/tabs/racing2.png",
+				"iconPath": "static/images/tabs/racing1.png",
+				"text": "赛车专版"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "开奖网",

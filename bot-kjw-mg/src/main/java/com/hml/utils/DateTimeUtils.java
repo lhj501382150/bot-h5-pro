@@ -1,6 +1,9 @@
 package com.hml.utils;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -80,5 +83,23 @@ public class DateTimeUtils {
 		}
 		list.add(fdate);
 		return list;
+	}
+	
+	public static LocalDateTime parseDate(String date) {
+		 // 定义时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 将字符串解析为 LocalDateTime
+        LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
+        return localDateTime;
+	}
+	
+	public static long getSeconds(LocalDateTime dateTime) {
+    	Duration duration = Duration.between(LocalDateTime.now(), dateTime);
+         // 获取相差的秒数
+        long secondsBetween = duration.getSeconds();
+        if(secondsBetween < 0) {
+        	secondsBetween = 0l;
+        }
+        return secondsBetween;
 	}
 }

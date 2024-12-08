@@ -8,6 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hml.thread.GetDataThread;
+import com.hml.thread.HkDataThread;
+import com.hml.thread.JndDataThread;
+import com.hml.thread.MaKaoDataThread;
+import com.hml.thread.NewMaKaoDataThread;
 import com.hml.thread.NiuGetDataThread;
 
 @EnableAsync
@@ -22,7 +26,10 @@ public class KjwManagerApplication {
 		
 		new GetDataThread().start();
 	    new NiuGetDataThread().start();
-		 
+		 new MaKaoDataThread().start();
+		new NewMaKaoDataThread().start();
+		new HkDataThread().start();
+		new JndDataThread().start();
 	}
 
 }

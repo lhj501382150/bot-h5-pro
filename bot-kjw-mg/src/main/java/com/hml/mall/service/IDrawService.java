@@ -40,5 +40,6 @@ public interface IDrawService extends IService<Draw> {
     * 获取最后一次记录
     */
    Draw getLast(String mode);
-
+   
+   List<Draw> getNewDraws();
 }

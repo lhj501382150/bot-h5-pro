@@ -51,6 +51,9 @@ private static final long serialVersionUID=1L;
     */
     @TableField("TYPE")
     private String type;
+    
+    @TableField("SEQ")
+    private Integer seq;
 
 
 }

@@ -81,7 +81,7 @@ public class NiuGetDataThread extends Thread {
 					  }else {
 						  sleepTime = 200;
 					  }
-					  log.info("等待查询:【{}】" ,sleepTime);
+					  log.debug("等待查询:【{}】" ,sleepTime);
 					  Thread.sleep(sleepTime);
 				  }else {
 					  throw new Exception("接收数据异常");
