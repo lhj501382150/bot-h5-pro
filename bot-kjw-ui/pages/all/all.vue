@@ -9,14 +9,14 @@
 					<view class="draw-sub-title">期:{{item.drawIssue || item.preDrawIssue}}</view>
 				</view>
 				<view class="draw-row" v-if="!item.load && item.type=='B'">
-					<view class="draw-main-title">哈希块:<text>{{formatHash(item.preDrawHash)}}</text></view>
+					<view class="draw-main-title">哈希块:<text @click="showHash(item)">{{formatHash(item.preDrawHash)}}</text></view>
 				</view>
-				<view class="draw-row" v-if="!item.load && item.type !='C'">
+				<view class="draw-row draw-row-left" v-if="!item.load && item.type !='C'">
 					<view class="code-item" v-for="(num,index) in item.data" :key="index" :class="item.mode=='A3'?'color0'+num:'color'+num">
 						{{num}}
 					</view>
 				</view>
-				<view class="draw-row" v-if="item.type =='C'">
+				<view class="draw-row draw-row-left" v-if="item.type =='C'">
 					<view class="code-item circle" v-for="(num,index) in item.numbers" :key="index" :class="'color'+num.color">
 						{{num.number}}
 					</view>
@@ -51,7 +51,8 @@
 			return {
 				formatHash:formatHash,
 				 draws:[],
-				 times:[]
+				 times:[],
+				 isShow:false
 			}
 		},
 		onLoad() {
@@ -62,7 +63,6 @@
 			this.isShow = true
 		},
 		onHide() {
-			this.isShow = false
 			if(this.times && this.times.length > 0){
 				this.times.forEach(timed=>{
 					if(timed){
@@ -70,8 +70,12 @@
 					}
 				})
 			}
+			this.isShow = false
 		},
 		methods: {
+			showHash(item){
+				window.open(item.modeUrl + '/#/block?hash=0x' + item.preDrawHash ,'_blank')
+			},
 			goHistory(item){
 				uni.setStorageSync('QUERY_MODE',item.mode)
 				uni.navigateTo({
@@ -179,9 +183,6 @@
 				align-items: center;
 				color: #fff;
 			}
-			.circle{
-				border-radius: 50%;
-			}
 			.draw-btn-item{
 				margin-top: 20upx;
 				width: 200upx;
@@ -191,6 +192,9 @@
 				text-align: center;
 				font-size: 28upx;
 			}
+		}
+		.draw-row-left{
+			justify-content: flex-start;
 		}
 		.draw-time{
 			background-color: #0066ec;

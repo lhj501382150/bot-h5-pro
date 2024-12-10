@@ -9,7 +9,7 @@
 					<view class="draw-sub-title">期:{{item.drawIssue}}</view>
 				</view>
 				<view class="draw-row" v-if="!item.load">
-					<view class="draw-main-title">哈希块:<text>{{formatHash(item.preDrawHash)}}</text></view>
+					<view class="draw-main-title">哈希块:<text @click="showHash(item)">{{formatHash(item.preDrawHash)}}</text></view>
 				</view>
 				<view class="draw-row" v-if="!item.load">
 					<view class="code-item" v-for="(num,index) in item.data" :key="index" :class="'color'+num">
@@ -44,6 +44,7 @@
 			return {
 				formatHash:formatHash,
 				 draws:[],
+				 times:[],
 				 isShow:false
 			}
 		},
@@ -56,8 +57,18 @@
 		},
 		onHide() {
 			this.isShow = false
+			if(this.times && this.times.length > 0){
+				this.times.forEach(timed=>{
+					if(timed){
+						clearTimeout(timed)
+					}
+				})
+			}
 		},
 		methods: {
+			showHash(item){
+				window.open(item.modeUrl + '/#/block?hash=0x' + item.preDrawHash ,'_blank')
+			},
 			goHistory(item){
 				uni.setStorageSync('QUERY_MODE',item.mode)
 				uni.navigateTo({
@@ -86,9 +97,10 @@
 					 this.draws.splice(index,1)
 					 this.draws.splice(index,0,item)
 				}else{
-					setTimeout(()=>{
+					let timed =setTimeout(()=>{
 						this.getOneResult(item,index)
 					},1000)
+					this.times.push(timed)
 				}
 			},
 			loadDraws(){

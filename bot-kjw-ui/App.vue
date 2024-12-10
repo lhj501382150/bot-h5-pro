@@ -1,13 +1,14 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
 		},
 		onShow: function() {
-			console.log('App Show')
+			// const sys = uni.getSystemInfoSync();
+			// if(sys.windowWidth > 750){
+			// 	uni.hideTabBar()
+			// }
 		},
 		onHide: function() {
-			console.log('App Hide')
 		}
 	}
 </script>

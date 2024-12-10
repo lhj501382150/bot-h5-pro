@@ -17,4 +17,8 @@ public class RedisKey {
 	public static String DRAW_ISSUE = "DRAW_ISSUE:";
 	
 	public static String DRAW_RESULT = "KJ_DRAW_RESULT:";
+	
+	public static String BLACK_IP_REQUEST = "KJW_BLACK_IP_REQUEST:";
+	
+	public static String BLACK_IP_LIST = "KJW_BLACK_IP_LIST";
 }

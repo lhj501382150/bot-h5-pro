@@ -20,7 +20,7 @@
 					<template v-if="drawItem.type=='C'">
 						<view class="info-row">开奖时间:{{drawItem.drawTime}} </view>
 						<view class="info-row">
-							<view class="code-item" v-for="(num,index) in drawItem.numbers" :key="index" :class="'color0'+num.color">
+							<view class="code-item circle" v-for="(num,index) in drawItem.numbers" :key="index" :class="'color'+num.color">
 								{{num.number}}
 							</view>
 						</view>
@@ -29,7 +29,7 @@
 						<view class="info-row">开奖时间:
 						<uni-countdown v-if="!isLoad" :showDay="false" :show-hour="false" :filterShow="{}" color="#d81e06" :minute="drawItem.minute" :second="drawItem.second" @timeup="teimeup(drawItem)"></uni-countdown>
 						</view>
-						<view class="info-row" v-if="drawItem.type=='B'">哈希块:<text class="hash">{{formatHash(drawItem.preDrawHash)}}</text></view>
+						<view class="info-row" v-if="drawItem.type=='B'">哈希块:<text class="hash" @click="goHash(drawItem)">{{formatHash(drawItem.preDrawHash)}}</text></view>
 						<view class="info-row" v-if="isLoad">
 							<image src="../../static/images/load.gif" mode="aspectFill" style="width: 200upx;height: 30upx;"></image>
 						</view>
@@ -54,7 +54,10 @@
 				  期
 			  </view>
 			  <view class="draw">开奖号码
-				<text v-if="drawItem.type=='B'" style="font-size: 24upx;margin-left: 20upx;color: blue;cursor: pointer;"  @click="showHash=!showHash">哈希</text>
+				<text v-if="drawItem.type=='B'" style="font-size: 24upx;margin-left:40upx;color: blue;cursor: pointer;"  @click="showHash=!showHash">
+					<text v-if="showHash">号码</text>
+					<text v-else>哈希</text>
+				</text>
 			  </view>
 		</view>
 		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 95%;"
@@ -67,7 +70,7 @@
 					 </view>
 					 <template v-if="item.type=='C'">
 						 <view class="draw" >
-								<view class="num-item" v-for="(num,index) in item.numbers" :key="index" :class="'color0'+num.color">
+								<view class="num-item circle" v-for="(num,index) in item.numbers" :key="index" :class="'color'+num.color">
 									{{num.number}}
 								</view>		
 						 </view>
@@ -78,11 +81,12 @@
 								{{item}}
 							</view>		
 						 </view>
+						 <view class="draw" v-else>
+						 	<view class="hash-text" @click="goHash(item)">{{formatHash(item.preDrawHash)}}</view>					 
+						 </view>
 					 </template>
 					 
-						<view class="draw" v-else>
-							<view class="hash-text" @click="goUrl(item.hash)">{{formatHash(item.preDrawHash)}}</view>					 
-						</view>
+						
 				 </view>
 			</view>
 		</scroll-view>
@@ -110,13 +114,18 @@
 				mode:0,
 				modes:[],
 				isLoad : false,
-				preDrawItem:{},
+				preDrawItem:{
+					dataId:0
+				},
 				timed:'',
 				showHash:false
 			}
 		},
 		onLoad(option) {
 			this.mode = uni.getStorageSync('QUERY_MODE')
+			if(!this.mode){
+				this.mode = 'B1'
+			}
 			this.records = []
 			this.loadModes()
 			this.getOneResult()
@@ -170,7 +179,6 @@
 			async getOneResult(){
 				let res = await this.$http.post('/draw/getResult',{mode:this.mode})
 				res = res.data
-				
 				if(res.data.dataId != this.preDrawItem.dataId){
 					this.isLoad = false
 					let item = res.data
@@ -192,8 +200,8 @@
 				}
 				
 			},
-			goUrl(hash){
-				let url = uni.getStorageSync('baseUrl') + '/#/block?hash=0x' +hash
+			goHash(item){
+				let url = item.modeUrl + '/#/block?hash=0x' + item.preDrawHash
 				window.open(url,'_blank')
 			},
 			scrolltolower() {
@@ -255,6 +263,9 @@
 			padding: 10upx 20upx;
 			background-color: #fafafa;
 			border-bottom: 1px solid #e2e2e2;
+			.select-box{
+				width:300upx;
+			}
 			.play-box{
 				display: flex;
 				justify-content: space-between;

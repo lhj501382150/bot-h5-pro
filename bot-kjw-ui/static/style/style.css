@@ -765,11 +765,14 @@ button {
 	background-color:#32CD32;
 }
 .color1{
-	background-color:#32CD32;
+	background-color:#cf1609;
 }
 .color2{
 	background-color:#00BFFF;
 }
 .color3{
-	background-color:#cf1609;
+	background-color:#32CD32;
+}
+.circle{
+	border-radius: 50%;
 }

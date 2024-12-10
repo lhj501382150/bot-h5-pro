@@ -14,18 +14,14 @@
 					<view class="info-row">期:<text>{{drawItem.preDrawIssue}}</text></view>
 					<template v-if="drawItem.type=='C'">
 						<view class="info-row">开奖时间:{{drawItem.drawTime}}</view>
-						
 						<view class="info-row">
-							<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color0'+num.color">
+							<view class="code-item circle" v-for="(num,index) in drawItem.data" :key="index" :class="'color'+num.color">
 								{{num.number}}
 							</view>
 						</view>
 					</template>
 					<template v-else>
-						<!-- <view class="info-row">开奖时间:
-						<uni-countdown v-if="!isLoad" :showDay="false" :show-hour="false" :filterShow="{}" color="#d81e06" :minute="drawItem.minute" :second="drawItem.second" @timeup="teimeup(drawItem)"></uni-countdown>
-						</view> -->
-						<view class="info-row" v-if="drawItem.type=='B'">哈希块:<text class="hash">{{formatHash(drawItem.preDrawHash)}}</text></view>
+						<view class="info-row" v-if="drawItem.type=='B'">哈希块:<text class="hash" @click="showHash(drawItem)">{{formatHash(drawItem.preDrawHash)}}</text></view>
 						<view class="info-row" v-if="isLoad">
 							<image src="../../static/images/load.gif" mode="aspectFill" style="width: 200upx;height: 30upx;"></image>
 						</view>
@@ -75,7 +71,6 @@
 				isLoad : false,
 				preDrawItem:{},
 				timed:'',
-				showHash:false,
 				isShow:false,
 				showCarModes:['A2','B1','B2','B3'],
 				isRunning:false
@@ -85,6 +80,9 @@
 			this.isShow = false
 			this.$nextTick(()=>{
 				this.mode = uni.getStorageSync('QUERY_MODE')
+				if(!this.mode){
+					this.mode = 'C1'
+				}
 				if(this.showCarModes.includes(this.mode)){
 					this.isShow = true
 				}
@@ -96,6 +94,9 @@
 			this.isShow = false
 		},
 		methods: {
+			showHash(item){
+				window.open(item.modeUrl + '/#/block?hash=0x' + item.preDrawHash ,'_blank')
+			},
 			changeRun(flag){
 				this.isRunning = flag
 			},

@@ -62,7 +62,9 @@ public class DrawServiceImpl extends ServiceImpl<DrawMapper, Draw> implements ID
     @Transactional(rollbackFor = Exception.class)
 	public boolean save(Draw entity) {
 		try {
-			backCoreService.addHqData(entity);
+			if(entity.getMode().startsWith("B")) {
+				backCoreService.addHqData(entity);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

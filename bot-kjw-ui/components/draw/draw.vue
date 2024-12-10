@@ -95,6 +95,7 @@
 			this.loadResult()
 		},
 		destroyed(){
+			console.log('destroyed---------------')
 			if(this.timed){
 				clearTimeout(this.timed)
 			}
@@ -109,8 +110,8 @@
 				},3000)
 			},
 			async getResult(){
-				console.log(this.mode)
 				this.isEnd = false
+				console.log('----------------------',this.mode)
 				let res = await this.$http.post('/draw/getResult',{mode:this.mode})
 				res = res.data
 				if(res.data.dataId != this.dataIssue){
