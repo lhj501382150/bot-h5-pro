@@ -34,9 +34,16 @@
 							<image src="../../static/images/load.gif" mode="aspectFill" style="width: 200upx;height: 30upx;"></image>
 						</view>
 						<view class="info-row" v-else>
-							<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color'+num">
-								{{num}}
-							</view>
+							<template v-if="drawItem.mode=='A3'">
+								<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color0'+num">
+									{{num}}
+								</view>
+							</template>
+							<template v-else>
+								<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color'+num">
+									{{num}}
+								</view>
+							</template>
 						</view>
 					</template>
 				</view>
@@ -77,9 +84,17 @@
 					 </template>
 					 <template v-else>
 						 <view class="draw" v-if="!showHash">
-							<view class="num-item" v-for="(item,index) in item.nums" :key="index" :class="'color'+item">
-								{{item}}
-							</view>		
+							 <template v-if="drawItem.mode=='A3'">
+							 	<view class="num-item" v-for="(item,index) in item.nums" :key="index" :class="'color0'+item">
+							 		{{item}}
+							 	</view>	
+							 </template>
+							 <template v-else>
+							 	<view class="num-item" v-for="(item,index) in item.nums" :key="index" :class="'color'+item">
+							 		{{item}}
+							 	</view>	
+							 </template>
+								
 						 </view>
 						 <view class="draw" v-else>
 						 	<view class="hash-text" @click="goHash(item)">{{formatHash(item.preDrawHash)}}</view>					 

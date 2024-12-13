@@ -55,20 +55,23 @@ public class MaKaoDataThread extends Thread {
 					  if(isFirst) {
 						  draw = new Draw();
 						  draw.setDataId(data.getLong("intPeriod"));
-						  draw.setPreDrawCode(StringUtils.getStr(data.getJSONArray("originalDataList")));
-						  draw.setPreDrawDate(data.getString("lotteryTime"));
-						  draw.setPreDrawTime(data.getString("lotteryTime"));
-						  draw.setPreDrawIssue(data.getString("period"));
-						  draw.setDrawIssue(data.getString("nextIntLotteryNumber"));
-						  draw.setDrawTime(data.getString("nextLotteryTime"));
-						  draw.setVideoUrl(data.getString("videoUrlForH5"));
-						  draw.setTitle(data.getString("title"));
-						  draw.setMemo(data.getString("numberList"));
-						  draw.setMode(MODE);
-						  
-						  drawService.save(draw);
-						  
-						  DATA_ID = draw.getDataId();
+						  JSONArray arr = data.getJSONArray("originalDataList");
+						  if(arr != null && arr.size() == 7) {
+							  draw.setPreDrawCode(StringUtils.getStr(arr));
+							  draw.setPreDrawDate(data.getString("lotteryTime"));
+							  draw.setPreDrawTime(data.getString("lotteryTime"));
+							  draw.setPreDrawIssue(data.getString("period"));
+							  draw.setDrawIssue(data.getString("nextIntLotteryNumber"));
+							  draw.setDrawTime(data.getString("nextLotteryTime"));
+							  draw.setVideoUrl(data.getString("videoUrlForH5"));
+							  draw.setTitle(data.getString("title"));
+							  draw.setMemo(data.getString("numberList"));
+							  draw.setMode(MODE);
+							  
+							  drawService.save(draw);
+							  
+							  DATA_ID = draw.getDataId();
+						  }
 					  }
 					  long sleepTime = 1000 * 60;
 					  Thread.sleep(sleepTime);

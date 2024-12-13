@@ -28,7 +28,7 @@
             }
         },
         "router" : {
-            "base" : ""
+            "base" : "/draw"
         }
     },
     /* 5+App特有相关 */

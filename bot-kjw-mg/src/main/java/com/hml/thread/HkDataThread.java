@@ -3,6 +3,7 @@ package com.hml.thread;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hml.mall.entity.Draw;
 import com.hml.mall.service.IDrawService;
@@ -55,20 +56,24 @@ public class HkDataThread extends Thread {
 					  if(isFirst) {
 						  draw = new Draw();
 						  draw.setDataId(data.getLong("intPeriod"));
-						  draw.setPreDrawCode(StringUtils.getStr(data.getJSONArray("originalDataList")));
-						  draw.setPreDrawDate(data.getString("lotteryTime"));
-						  draw.setPreDrawTime(data.getString("lotteryTime"));
-						  draw.setPreDrawIssue(data.getString("period"));
-						  draw.setDrawIssue(data.getString("nextIntLotteryNumber"));
-						  draw.setDrawTime(data.getString("nextLotteryTime"));
-						  draw.setVideoUrl(data.getString("videoUrlForH5"));
-						  draw.setTitle(data.getString("title"));
-						  draw.setMemo(data.getString("numberList"));
-						  draw.setMode(MODE);
+						  JSONArray arr = data.getJSONArray("originalDataList");
+						  if(arr != null && arr.size() == 7) {
+							  draw.setPreDrawCode(StringUtils.getStr(arr));
+							  draw.setPreDrawDate(data.getString("lotteryTime"));
+							  draw.setPreDrawTime(data.getString("lotteryTime"));
+							  draw.setPreDrawIssue(data.getString("period"));
+							  draw.setDrawIssue(data.getString("nextIntLotteryNumber"));
+							  draw.setDrawTime(data.getString("nextLotteryTime"));
+							  draw.setVideoUrl(data.getString("videoUrlForH5"));
+							  draw.setTitle(data.getString("title"));
+							  draw.setMemo(data.getString("numberList"));
+							  draw.setMode(MODE);
+							  
+							  drawService.save(draw);
+							  
+							  DATA_ID = draw.getDataId();
+						  }
 						  
-						  drawService.save(draw);
-						  
-						  DATA_ID = draw.getDataId();
 					  }
 					  long sleepTime = 1000 * 60;
 					  Thread.sleep(sleepTime);

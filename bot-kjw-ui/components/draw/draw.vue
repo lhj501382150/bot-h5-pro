@@ -7,7 +7,7 @@
 							 <view class="positm" v-for="(item,index) in positms" :key="index" :class="'num' + parseInt(item)"></view>
 						 </view>
 						 <view class="currentdraw">
-								当前期：<text style="color:#00fff8;font-weight: bold;font-size:1.1em;" class="currentdrawid">{{dataIssue}}</text>
+								当前期：<text style="color:#00fff8;font-weight: bold;font-size:1.1em;" class="currentdrawid">{{drawIssue}}</text>
 						 </view>
 			</view>
 			<view class="scenary page1" v-if="isStart">
@@ -61,12 +61,13 @@
 		props:{
 			mode:{
 				type:String,
-				default:'B1'
+				default:''
 			}
 		},
 		data() {
 			return {
 				dataIssue:'',
+				drawIssue:'',
 				positms:[1,2,3,4,5,6,7,8,9,10],
 				cars:[1,2,3,4,5,6,7,8,9,10],
 				carsWind:[false,false,false,false,false,false,false,false,false,false],
@@ -92,7 +93,10 @@
 		},
 		mounted() {
 			this.positms = []
-			this.loadResult()
+			if(this.mode){
+				uni.setStorageSync('DRAWW_MODE',this.mode)
+				this.loadResult()
+			}
 		},
 		destroyed(){
 			console.log('destroyed---------------')
@@ -112,9 +116,12 @@
 			async getResult(){
 				this.isEnd = false
 				console.log('----------------------',this.mode)
+				let mode = uni.getStorageSync('DRAWW_MODE')
+				if(this.mode != mode) return
 				let res = await this.$http.post('/draw/getResult',{mode:this.mode})
 				res = res.data
 				if(res.data.dataId != this.dataIssue){
+					this.drawIssue = res.data.drawIssue
 					this.isEnd = true
 					this.$emit('updateDraw',res.data)
 					this.finishgame(res.data.preDrawCode)
@@ -133,6 +140,7 @@
 				this.$http.post('/draw/getResult',{mode:this.mode},(res)=>{
 					if(this.dataIssue != res.data.dataId){
 						this.dataIssue = res.data.dataId
+						this.drawIssue = res.data.drawIssue
 						this.positms = res.data.preDrawCode.split(',').map(item=>parseInt(item))
 						this.countTime = res.data.leftTime - 15
 						if(this.countTime < 0){

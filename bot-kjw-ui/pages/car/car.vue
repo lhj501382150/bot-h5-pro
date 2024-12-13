@@ -26,9 +26,17 @@
 							<image src="../../static/images/load.gif" mode="aspectFill" style="width: 200upx;height: 30upx;"></image>
 						</view>
 						<view class="info-row" v-else>
-							<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color'+num">
-								{{num}}
-							</view>
+							<template v-if="drawItem.mode=='A3'">
+								<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color0'+num">
+									{{num}}
+								</view>
+							</template>
+							<template v-else>
+								<view class="code-item" v-for="(num,index) in drawItem.data" :key="index" :class="'color'+num">
+									{{num}}
+								</view>
+							</template>
+							
 						</view>
 					</template>
 					
@@ -72,7 +80,7 @@
 				preDrawItem:{},
 				timed:'',
 				isShow:false,
-				showCarModes:['A2','B1','B2','B3'],
+				showCarModes:['A1','A2','B1','B2','B3'],
 				isRunning:false
 			}
 		},

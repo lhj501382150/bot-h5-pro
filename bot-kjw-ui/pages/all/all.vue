@@ -1,12 +1,12 @@
 <template>
 	<view class="content">
-		<draw v-if="isShow"></draw>
+		<draw v-if="isShow" mode="B1"></draw>
 		
 		<view class="draw-game-list">
 			<view class="draw-game-item" v-for="(item,index) in draws" :key="index">
 				<view class="draw-row">
 					<view class="draw-main-title">{{item.modeName}}</view>
-					<view class="draw-sub-title">期:{{item.drawIssue || item.preDrawIssue}}</view>
+					<view class="draw-sub-title">期:{{item.preDrawIssue || item.drawIssue}}</view>
 				</view>
 				<view class="draw-row" v-if="!item.load && item.type=='B'">
 					<view class="draw-main-title">哈希块:<text @click="showHash(item)">{{formatHash(item.preDrawHash)}}</text></view>
@@ -140,6 +140,7 @@
 <style lang="scss" scoped>
 .content{
 	background-color:#e2e2e2;
+	overflow-x: hidden;
 }
  .draw-game-list{
 	background-color:#ffffff;
@@ -147,6 +148,7 @@
 	height: 62vh;
 	overflow:auto;
 	margin-top: 20upx;
+	overflow-x: hidden;
 	.draw-game-item{
 		width:710upx; 
 		border: 1px solid #e2e2e2;

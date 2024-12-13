@@ -455,7 +455,7 @@ body {
 	right: 40upx;
 	top: 15upx;
 	font-size: 24upx;
-	width: 200upx;
+	width: 220upx;
 	white-space: nowrap;
 	color: #fff;
 }
@@ -730,6 +730,9 @@ button {
 .closesoundbtn{
 	background-position-y: 85% !important;
 }
+.color00{
+	background-color:#aa557f;
+}
 .color01{
 	background-color:#FFD700;
 }
@@ -761,9 +764,6 @@ button {
 	background-color:#32CD32;
 }
 
-.color1{
-	background-color:#32CD32;
-}
 .color1{
 	background-color:#cf1609;
 }
