@@ -578,7 +578,7 @@
 				})
 			},
 			goUrl(){
-				let url = uni.getStorageSync('baseUrl') + '/#/block?hash=0x' +this.result.HASH
+				let url = uni.getStorageSync('baseUrl') 
 				window.open(url,'_blank')
 			},
 			goBack(){

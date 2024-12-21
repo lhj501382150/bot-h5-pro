@@ -43,7 +43,7 @@ public class Hash3Thread extends Thread {
 						  isFirst = draw.getId() - data.getInteger("dataId") != 0;
 					  }
 					  if(isFirst) {
-						  draw = HqTaskManager.getDataSource(MODE_1, KEY_1, data);
+						  draw = HqTaskManager.getDataSource(MODE_1, KEY_1, data,redisUtils);
 						  HqTaskManager.copyDataSource(draw, MODE_2, KEY_2);
 						  boolean flag = true;
 						  try {
@@ -60,6 +60,7 @@ public class Hash3Thread extends Thread {
 							  req.put("drawIssue", data.getLong("preDrawIssue"));
 							  req.put("sTime", data.getString("preDrawTime"));
 							  req.put("sResult", data.getString("preDrawCode"));
+							  req.put("hash",draw.getHash());
 							  req.put("mode", MODE_1);
 							  backCoreService.addData(req);
 							  

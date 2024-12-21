@@ -572,7 +572,7 @@ z<template>
 				if(this.mode==8){
 					url = this.link.src
 				}else{
-					url = uni.getStorageSync('baseUrl') + '/#/block?hash=0x' +this.result.HASH
+					url = uni.getStorageSync('baseUrl') 
 				}
 				window.open(url,'_blank')
 			},

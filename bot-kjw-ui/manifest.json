@@ -12,7 +12,7 @@
             "proxy" : {
                 "/kjw" : {
                     // "target" : "http://127.0.0.1:9001/kjw", //目标接口域名
-                    "target" : "http://18.212.105.77:8000/kjw", //目标接口域名
+                    "target" : "http://hx0000.com/kjw", //目标接口域名
                     "changeOrigin" : true, //是否跨域
                     "secure" : false, // 设置支持https协议的代理
                     "pathRewrite" : {
@@ -28,7 +28,7 @@
             }
         },
         "router" : {
-            "base" : "/draw"
+            "base" : ""
         }
     },
     /* 5+App特有相关 */

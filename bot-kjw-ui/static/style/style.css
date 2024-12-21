@@ -130,91 +130,98 @@ body {
 .car1 {
 	top: -20upx;
 	left: 670upx;
-	image{
-		width: 95upx;
-		height: 26upx;
-	}
+}
+.car-img1{
+	width: 95upx;
+	height: 26upx;
 }
 
 .car2 {
 	top: 0upx;
 	left: 665upx;
-	image{
-		width: 100upx;
-		height: 26upx;
-	}
+	
 }
-
+.car-img2{
+	width: 100upx;
+	height: 26upx;
+}
 .car3 {
 	top: 20upx;
 	left: 658upx;
-	image{
+	
+}
+.car-img3{
 		width: 105upx;
 		height: 28upx;
 	}
-}
 
 .car4 {
 	top: 50upx;
 	left: 650upx;
-	image{
+	
+}
+.car-img4{
 		width: 110upx;
 		height: 31upx;
 	}
-}
 
 .car5 {
 	top: 82upx;
 	left: 645upx;
-	image{
+	
+}
+.car-img5{
 		width: 115upx;
 		height: 34upx;
 	}
-}
 
 .car6 {
 	top: 117upx;
 	left: 640upx;
-	image{
+	
+}
+.car-img6{
 		width: 120upx;
 		height: 34upx;
 	}
-}
 
 .car7 {
 	top: 150upx;
 	left: 630upx;
-	image{
+	
+}
+.car-img7{
 		width: 125upx;
 		height: 35upx;
 	}
-}
 
 .car8 {
 	top: 185upx;
 	left: 625upx;
-	image{
-		width: 130upx;
-		height: 35upx;
-	}
+	
+}
+.car-img8{
+	width: 130upx;
+	height: 35upx;
 }
 
 .car9 {
 	top: 220upx;
 	left: 615upx;
-	image{
-		width: 135upx;
-		height: 40upx;
-	}
+	
+}
+.car-img9{
+	width: 135upx;
+	height: 40upx;
 }
 
 .car10 {
 	top: 260upx;
 	left: 610upx;
-	image{
-		width: 140upx;
-		height: 40upx;
-	}
+}
+.car-img10{
+	width: 140upx;
+	height: 40upx;
 }
 
 .roadstart {
@@ -613,7 +620,9 @@ body {
 .wind {
 	position: absolute;
 	top: 3upx;
-	left: -15upx;
+	left: -8upx;
+	width: 50upx!important;
+	height: 40upx!important;
 	/* display: none; */
 }
 
@@ -681,6 +690,10 @@ body {
 		width: 100%;
 		height: 100%;
 	}
+}
+.resultcar-img{
+	width: 100%;
+	height: 100%;
 }
 
 .resultcar2 {

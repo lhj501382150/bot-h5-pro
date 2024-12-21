@@ -1,16 +1,13 @@
 package com.hml.thread;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.alibaba.fastjson.JSONObject;
 import com.hml.back.service.BackCoreService;
 import com.hml.bean.DataSource;
 import com.hml.config.BotConfig;
 import com.hml.hq.config.HqConfig;
+import com.hml.redis.RedisHqKey;
 import com.hml.redis.RedisKey;
 import com.hml.redis.RedisUtils;
-import com.hml.task.DrawInfo;
 import com.hml.task.HqTaskManager;
 import com.hml.utils.HttpClientUtils;
 import com.hml.utils.SpringUtil;
@@ -47,7 +44,7 @@ public class Hash1Thread extends Thread {
 						  isFirst = draw.getId() - data.getInteger("dataId") != 0;
 					  }
 					  if(isFirst) {
-						  draw = HqTaskManager.getDataSource(MODE_1, KEY_1, data);
+						  draw = HqTaskManager.getDataSource(MODE_1, KEY_1, data,redisUtils);
 						  HqTaskManager.copyDataSource(draw, MODE_2, KEY_2);
 						  boolean flag = true;
 						  try {
@@ -64,6 +61,7 @@ public class Hash1Thread extends Thread {
 							  req.put("drawIssue", data.getLong("preDrawIssue"));
 							  req.put("sTime", data.getString("preDrawTime"));
 							  req.put("sResult", data.getString("preDrawCode"));
+							  req.put("hash",draw.getHash());
 							  req.put("mode", MODE_1);
 							  backCoreService.addData(req);
 							  

@@ -28,7 +28,7 @@
 							 <image src="../../static/images/finisher.png" class="roadstart-img"></image>
 						 </view>
 						 <view v-for="(item,index) in cars" :key="index" :class="'car' + parseInt(item)" :style="{left:carsLeft[index]+'upx'}">
-							 <image :src="'../../static/images/car'+parseInt(item)+'.png'" mode="aspectFill" class="car-img"></image>
+							 <image :src="'../../static/images/car'+parseInt(item)+'.png'" mode="aspectFill" :class="'car-img car-img'+parseInt(item)"></image>
 							 <image src="../../static/images/wheel.gif" :class="'wheel'+parseInt(item)+'a'"></image>
 							 <image src="../../static/images/wheel.gif" :class="'wheel'+parseInt(item)+'b'"></image>
 							 <image src="../../static/images/wind.png" class="wind" v-show="carsWind[index]"></image>
@@ -47,7 +47,7 @@
 				<view class="resultitm result2"></view>
 				<view class="resultitm result3"></view>
 				<view v-for="(item,index) in positms" :key="index" v-if="index < 3" :class="'resultitm resultcar'+(index+1)">
-					<image :src="'../../static/images/winner'+item+'.png'" mode="aspectFill"></image>
+					<image :src="'../../static/images/winner'+item+'.png'" mode="aspectFill" class="resultcar-img"></image>
 				</view>
 			</view>
 		</view>
@@ -117,7 +117,13 @@
 				this.isEnd = false
 				console.log('----------------------',this.mode)
 				let mode = uni.getStorageSync('DRAWW_MODE')
-				if(this.mode != mode) return
+				if(this.mode != mode) {
+					if(this.timed){
+						clearTimeout(this.timed)
+					}
+					this.stopanimation()
+					return
+				}
 				let res = await this.$http.post('/draw/getResult',{mode:this.mode})
 				res = res.data
 				if(res.data.dataId != this.dataIssue){

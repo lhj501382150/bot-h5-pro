@@ -38,7 +38,7 @@ public class HqTaskManager {
 	/*
 	 * 获取数据源
 	 */
-	public static DataSource getDataSource(String mode,String key,JSONObject json) throws Exception {
+	public static DataSource getDataSource(String mode,String key,JSONObject json,RedisUtils redisUtils) throws Exception {
 		DataSource item = new DataSource();
 		item.setId(json.getLong("dataId"));
 		item.setBotId(BotConfig.CHAT_ID);
@@ -51,6 +51,11 @@ public class HqTaskManager {
 		item.setSTime(json.getString("preDrawTime"));
 		
 		dataMap.put(key, item);
+		try {
+			redisUtils.set(RedisHqKey.MODE_HQ_RESULT + key, JSONObject.toJSONString(item));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return item;
 	}
 	
