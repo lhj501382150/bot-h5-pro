@@ -67,7 +67,7 @@
 				</text>
 			  </view>
 		</view>
-		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 95%;"
+		<scroll-view scroll-y="true" @scrolltolower="scrolltolower" style="height: 80%;"
 		        @refresherrefresh="getRefresherrefresh" :refresher-enabled="false" :refresher-triggered="refresherTriggered"
 		        refresher-background="transparent">
 			<view class="record-list">
@@ -117,7 +117,7 @@
 				drawItem:{},
 				records:[],
 				search:{
-					pageNum:0,
+					pageNum:1,
 					pageSize:20,
 					params:{
 						PRE_DRAW_DATE:''
@@ -156,7 +156,7 @@
 			changeDate(val){
 				this.records = []
 				this.search = {
-					pageNum:0,
+					pageNum:1,
 					pageSize:20
 				}
 				this.loadData()
@@ -166,7 +166,7 @@
 					clearTimeout(this.timed)
 				}
 				this.search = {
-					pageNum:0,
+					pageNum:1,
 					pageSize:20
 				}
 				this.mode = mode
@@ -221,12 +221,13 @@
 			},
 			scrolltolower() {
 				if (this.records.length >= this.totalCount) return
+				this.search.pageNum += 1
 				this.loadData()
 			},
 			//下拉刷新
 			getRefresherrefresh(){
 				this.refresherTriggered = true
-				this.search.pageIdx = 0
+				this.search.pageNum = 0
 				this.totalPage = 1
 				this.totalCount = 0
 				this.records = []
@@ -248,11 +249,7 @@
 					})
 					this.records = [...this.records,...datas]
 					this.totalCount = res.data.totalSize;
-					if (this.search.pageNum >= this.totalCount) {
-						this.search.pageNum = this.totalCount + 1;
-					} else {
-						this.search.pageNum = this.search.pageNum + this.search.pageSize
-					}
+					 
 					this.refresherTriggered = false
 				})
 			},
